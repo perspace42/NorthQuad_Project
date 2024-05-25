@@ -7,6 +7,7 @@ Purpose:
 Allow the user to select a faction to view, after which point the faction can be editted or
 deleted if the user was the original poster of that faction
 -->
+<!--For Reverse Function-->
 <html lang="en">
 
 <head>
@@ -33,11 +34,11 @@ deleted if the user was the original poster of that faction
     <main>
         {% if factionList %}
         <label>Edit a Faction: </label><button type = "submit">Create Faction</button>
-            <form>
+            <form method = "get" action = "{% url 'saga:results' faction.id %}" id = "factionForm">
                 <label for="faction">Select a Faction:</label>
                     <select id="faction" name="faction">
                         {% for faction in factionList %}
-                            <option value={{faction.id}}>{{faction.name}}</option>
+                            <option value={{faction.id}}> {{faction.name}} </option>
                         {% endfor %}
                     </select>
                 <button type="submit">View Faction</button>
@@ -47,5 +48,17 @@ deleted if the user was the original poster of that faction
         {% endif %}
     </main>
 </body>
+
+<script>
+        var factionForm = document.getElementById('factionForm');
+        //If the factionForm is present
+        if (factionForm) {
+          console.log("Form is present");
+          //Stop it from being submitted when the page is loaded
+          factionForm.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+          });
+        }
+</script>
 
 </html>

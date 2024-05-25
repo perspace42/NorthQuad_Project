@@ -17,20 +17,24 @@ the user that created that faction
 </head>
 
 <body>
-    <header>
-        <h1>Faction Name</h1>
-    </header>
+    {% if unitList %}
+        <header>
+            <h1>{{unitList.first.factionName}}</h1>
+        </header>
 
-    <p1>Faction Description
-    </p1>
+        <p1>Faction Description
+        </p1>
 
-    <!--Split Sections-->
-    <br><br>
+        <!--Split Sections-->
+        <br><br>
 
-    <!--Form To Display Available Factions-->
-    <main>
-        Faction Table
-    </main>
+        <!--Table To Display Selected Faction-->
+        <main>
+            Faction Table
+        </main>
+    {% else %}
+        Nothing contained in the unit list
+    {% endif %}
 </body>
 
 </html>

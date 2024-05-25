@@ -13,7 +13,7 @@ from django.http import Http404 #Error Message
 from django.shortcuts import render, get_object_or_404 #Shorten Instructions
 from django.urls import reverse
 
-from .models import Faction
+from .models import Faction,Unit
 
 
 # Create your views here.
@@ -25,8 +25,15 @@ def index(request):
     context = {"factionList" : factionList}
     return render(request,"saga/index.html", context)
 
-#Results View Page, (Display Faction)
-def results(request):
-    return render(request)
+#Results View Page, (GET Units that are in a Faction)
+def results(request, factionId):
+    #Get the units belonging to a specific faction
+    unitList = Unit.objects
+    if unitList:
+        unitList = unitList.filter(id == factionId)
+        context = {"unitList" : unitList}
+        return render(request, "saga/results.html", context)
+    else:
+        raise Http404("Error no units in UnitList")
 
 #Edit/Create Page, (Edit Exiting Faction, Delete Faction)

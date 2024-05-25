@@ -13,6 +13,7 @@ app_name = "saga"
 
 urlpatterns = [
     #ex: /saga/
-    path("", views.index, name = "index")
-    
+    path("", views.index, name = "index"),
+    #ex: /saga/results/Anglo Saxons
+    path("results/<int:id>/",views.results, name = 'results')  
 ]

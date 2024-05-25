@@ -12,6 +12,7 @@ from sagaoptions import Options as So
 
 #Faction Model
 class Faction(models.Model):
+    id = models.AutoField(primary_key=True)
     #The name of the Saga Faction
     name = models.CharField(max_length = 30)
     description = models.TextField(default = "")
@@ -23,6 +24,7 @@ class Faction(models.Model):
 
 #Unit Within Faction Model
 class Unit(models.Model):
+    id = models.AutoField(primary_key=True)
     #The amount of dice a unit generates at the start of the turn
     sagaDice = models.PositiveIntegerField(default = 1)
 
