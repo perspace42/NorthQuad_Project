@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+Author: Scott Field
+Date: 5/24/2024
+Version: 1.0
+Purpose:
+Allow the user to select a faction to view, after which point the faction can be editted or
+deleted if the user was the original poster of that faction
+-->
+<html lang="en">
+
+<head>
+    <title>Saga Faction Builder Home Page</title>
+    <meta charset="utf-8">
+    <meta name = "description" content = "The Saga Faction Builder, is used to build factions for the popular Saga wargame made by Studio Tomahawk.">
+</head>
+
+<body>
+    <header>
+        <h1>Saga Army Builder Home Page</h1>
+    </header>
+
+    <p1>Welcome to the Saga Faction Builder.
+        <br> click the <b>Create Faction</b> button to develop a new Faction to post to the website
+        <br> click the <b>View Faction</b> button to view a Selected Faction, or to View then Edit an Existing Faction posted by you.
+        <br> (users can only edit factions they have posted)
+    </p1>
+
+    <!--Split Sections-->
+    <br><br>
+
+    <!--Form To Display Available Factions-->
+    <main>
+        {% if factionList %}
+        <label>Edit a Faction: </label><button type = "submit">Create Faction</button>
+            <form>
+                <label for="faction">Select a Faction:</label>
+                    <select id="faction" name="faction">
+                        {% for faction in factionList %}
+                            <option value={{faction.id}}>{{faction.name}}</option>
+                        {% endfor %}
+                    </select>
+                <button type="submit">View Faction</button>
+            </form>
+        {% else %}
+            <p>No Factions Available To Edit</p>
+        {% endif %}
+    </main>
+</body>
+
+</html>
