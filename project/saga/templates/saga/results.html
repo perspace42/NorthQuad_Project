@@ -19,10 +19,12 @@ the user that created that faction
 <body>
     {% if unitList %}
         <header>
-            <h1>{{unitList.first.factionName}}</h1>
+            <!--In this case the first object in the QuerySet is the only object in the QuerySet-->
+            <h1>{{faction.first.name}}</h1>
         </header>
 
-        <p1>Faction Description
+        <p1>
+            {{faction.first.description}}
         </p1>
 
         <!--Split Sections-->
@@ -31,6 +33,81 @@ the user that created that faction
         <!--Table To Display Selected Faction-->
         <main>
             Faction Table
+            <table>
+                <tr>
+                  <th>Unit</th>
+                  <th>Type</th>
+                  <th>Equipment Options</th>
+                  <th>Armour</th>
+                  <th>Melee (Shooting)</th>
+                  <th>Aggression</th>
+                  <th>Melee(Shooting)</th>
+                  <th>Special Rules</th>
+                </tr>
+                <tr>
+                  <td>Consul</td>
+                  <td>-</td>
+                  <td>5 (5)</td>
+                  <td>8</td>
+                  <td></td>
+                  <td></td>
+                  <td>Warlord</td>
+                </tr>
+                <tr>
+                  <td>Consul</td>
+                  <td>Horse</td>
+                  <td>5 (4)</td>
+                  <td>8</td>
+                  <td></td>
+                  <td></td>
+                  <td>Warlord, Mount (Horse)</td>
+                </tr>
+                <tr>
+                  <td>Tribune</td>
+                  <td>Horse</td>
+                  <td>5 (4)</td>
+                  <td>2</td>
+                  <td></td>
+                  <td></td>
+                  <td>Warlord, Mount (Horse)</td>
+                </tr>
+                <tr>
+                  <td>Hearthguards</td>
+                  <td>-</td>
+                  <td>5 (5)</td>
+                  <td>2</td>
+                  <td></td>
+                  <td></td>
+                  <td>Maniples</td>
+                </tr>
+                <tr>
+                  <td>Warriors</td>
+                  <td>-</td>
+                  <td>4 (4)</td>
+                  <td>1</td>
+                  <td></td>
+                  <td></td>
+                  <td>Maniples</td>
+                </tr>
+                <tr>
+                  <td>Warriors</td>
+                  <td>Horse</td>
+                  <td>4 (3)</td>
+                  <td>1</td>
+                  <td></td>
+                  <td></td>
+                  <td>Mount (Horse), one unit per warband</td>
+                </tr>
+                <tr>
+                  <td>Levies</td>
+                  <td>Javelins</td>
+                  <td>3 (4)</td>
+                  <td>1/3 (1/2)</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </table>
         </main>
     {% else %}
         Nothing contained in the unit list

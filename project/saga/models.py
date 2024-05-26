@@ -12,8 +12,9 @@ from sagaoptions import Options as So
 
 #Faction Model
 class Faction(models.Model):
+    #The id must be a char here for Faction because: the (Unit) factionName will not accept the (Faction) name as a foreign key
     id = models.AutoField(primary_key=True)
-    #The name of the Saga Faction
+    #The name of the Saga Faction is unique as no two factions can have the same name
     name = models.CharField(max_length = 30)
     description = models.TextField(default = "")
     specialRules = models.TextField(default = "-")
@@ -51,7 +52,7 @@ class Unit(models.Model):
     isLegendary = models.BooleanField(default = False)
 
     #Link Hero to the owning Faction (If Faction Removed, Unit is Also Removed)
-    factionName = models.ForeignKey(Faction, on_delete = models.CASCADE)
+    factionId = models.ForeignKey(Faction, on_delete = models.CASCADE)
 
     #String Representation
     def __str__(self):

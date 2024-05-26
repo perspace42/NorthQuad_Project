@@ -7,7 +7,7 @@ Purpose:
 Allow the user to select a faction to view, after which point the faction can be editted or
 deleted if the user was the original poster of that faction
 -->
-<!--For Reverse Function-->
+<!--index.html-->
 <html lang="en">
 
 <head>
@@ -33,15 +33,15 @@ deleted if the user was the original poster of that faction
     <!--Form To Display Available Factions-->
     <main>
         {% if factionList %}
-        <label>Edit a Faction: </label><button type = "submit">Create Faction</button>
-            <form method = "get" action = "{% url 'saga:results' faction.id %}" id = "factionForm">
-                <label for="faction">Select a Faction:</label>
-                    <select id="faction" name="faction">
+        <label>Edit a Faction: </label><button>Create Faction</button>
+            <form method = "post" id = "factionForm"> 
+                <label for="factionChoice">Select a Faction:</label>
+                    <select id="factionChoice" name="faction">
                         {% for faction in factionList %}
                             <option value={{faction.id}}> {{faction.name}} </option>
                         {% endfor %}
                     </select>
-                <button type="submit">View Faction</button>
+                <button type="submit" id = "viewFactionButton">View Faction</button>
             </form>
         {% else %}
             <p>No Factions Available To Edit</p>
@@ -50,15 +50,21 @@ deleted if the user was the original poster of that faction
 </body>
 
 <script>
-        var factionForm = document.getElementById('factionForm');
+        //get form elements
+        const factionForm = document.getElementById('factionForm');
+        const factionChoice = document.getElementById('factionChoice');
+        const viewFactionButton = document.getElementById("viewFactionButton");
+
         //If the factionForm is present
         if (factionForm) {
           console.log("Form is present");
-          //Stop it from being submitted when the page is loaded
+          //function must be asynchronous
           factionForm.addEventListener('submit', function(event) {
+            //prevent the default form submission
             event.preventDefault(); 
           });
         }
+        
 </script>
 
 </html>

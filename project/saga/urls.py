@@ -14,6 +14,6 @@ app_name = "saga"
 urlpatterns = [
     #ex: /saga/
     path("", views.index, name = "index"),
-    #ex: /saga/results/Anglo Saxons
-    path("results/<int:id>/",views.results, name = 'results')  
+    #ex: /saga/results/Anglo_Saxons
+    path("results/<str:factionId>",views.results, name = 'results')  
 ]

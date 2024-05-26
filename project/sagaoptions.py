@@ -41,5 +41,3 @@ class Options:
         #Represents No Special Equipment
         ("-","-"),
     )
-
-    
