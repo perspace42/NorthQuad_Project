@@ -33,7 +33,8 @@ Allow the user to edit a faction and its units if one is supplied
 
     <!--Faction Input Fields-->
     <label for = "fName">Name:</label>
-    <input type = "text" id = "fName" value = {{faction.first.name}} >
+    <!--autoescape to read spaces in the faction name-->
+    <input type = "text" id = "fName" value = "{% autoescape off %}{{faction.first.name}}{% endautoescape %}">
     <br><br>
     <div style="display: flex; flex-direction: column;">
         <label for = "fDescription">Description:</label>
@@ -54,7 +55,7 @@ Allow the user to edit a faction and its units if one is supplied
     <!--Unit Input Fields-->
     <div style = "width: 75%; margin: 0 auto;">
         <!--This is the outer table-->
-        <table>
+        <table id = "{{faction.first.id}}">
             <tr>
             <th>Type</th>
             <th>Unit</th>
@@ -76,7 +77,8 @@ Allow the user to edit a faction and its units if one is supplied
                 
             <!-- Get the unit from the QuerySet -->
                 {% for unit in collection %}
-                    <tr>
+                    <!--track the id for each unit-->
+                    <tr id = "{{unit.id}}">
                         <td>
                             <select>
                                 {% for tuple in options.unitOptions %}
@@ -84,17 +86,24 @@ Allow the user to edit a faction and its units if one is supplied
                                 {% endfor %}
                             </select>
                         </td>
-                        <td>{{unit.unitName}}</td>
-                        <td>{{unit.sagaDice}}</td>
-                        <td>{{unit.numModels}}</td>
-                        <td>{{unit.equipment}}</td>
-                        <td>{{unit.armourMelee}}</td>
-                        <td>{{unit.armourRanged}}</td>
-                        <td>{{unit.aggMelee}}</td>
-                        <td>{{unit.aggRanged}}</td>
-                        <td>{{unit.specialRules}}</td>
-                        <td>{{unit.isLegendary}}</td>
-                        <td>{{unit.cost}}</td>
+                        <!--autoescape to read spaces in the unit name-->
+                        <td><input type = "text"  value = "{% autoescape off %}{{unit.unitName}}{% endautoescape %}"></td>
+                        <td><input type = "number" class = "shrinkInput" min = "0"  value = {{unit.sagaDice}}></td>
+                        <td><input type = "number" class = "shrinkInput" min = "0"  value = {{unit.numModels}}></td>
+                        <td>
+                            <select>
+                                {% for tuple in options.equipmentOptions %}
+                                    <option value = "{{ tuple.0 }}" {%if tuple.1 == unit.equipment %} selected {%endif%}>{{tuple.1}}</option> 
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input type = "number" class = "shrinkInput" min = "0" value = {{unit.armourMelee}}></td>
+                        <td><input type = "number" class = "shrinkInput" min = "0" value = {{unit.armourRanged}}></td>
+                        <td><input type = "number" class = "shrinkInput" min = "0" value = {{unit.aggMelee}}></td>
+                        <td><input type = "number" class = "shrinkInput" min = "0" value = {{unit.aggRanged}}></td>
+                        <td><textarea>{{ unit.specialRules }}</textarea></td>
+                        <td><input type = "checkbox" {%if unit.isLegendary %} checked {% endif %}></td>
+                        <td><input type = "number" class = "shrinkInput" value = {{unit.cost}}></td>
                         <!--Delete Button-->
                         <td><button class = "deleteRow">Delete</button></td>
                     </tr>

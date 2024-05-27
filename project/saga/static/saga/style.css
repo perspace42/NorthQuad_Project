@@ -4,14 +4,14 @@ table {
     border: 1px solid black;
 
     /*Width For Display Tables*/
-    table-layout: fixed;
-    
+    table-layout: fixed;   
 }
 
 th,td{
     /*Border For Display Tables*/
     border: 1px solid black;
     padding: 2px;
+    
 }
 
 textarea{
@@ -37,5 +37,14 @@ textarea{
     margin-right: 5;
     margin-left: 5;
 }
+
+/*shrink input fields that do not need their full size*/
+.shrinkInput{
+    box-sizing: border-box;
+    width: 6ch;
+    margin: auto;
+}
+
+
 
 
