@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+Author: Scott Field
+Date: 5/26/2024
+Version: 1.0
+Purpose:
+Allow the user to create a faction and its units if none is supplied
+Allow the user to edit a faction and its units if one is supplied
+-->
+<html lang="en">
+<!--Get The CSS styling-->
+{% load static %}
+<link rel="stylesheet" href = "{%static 'saga/style.css'%}">
+
+<head>
+    <title>Saga Faction Create/Edit</title>
+    <meta charset="utf-8">
+    <meta name = "description" content = "The Saga Faction Create/Edit page is to create or edit a faction">
+</head>
+
+<body>
+    {% if faction%}
+    This is the edit faction page
+    {% else %}
+    This is the create faction page
+    {% endif %}
+</body>
+
+</html>

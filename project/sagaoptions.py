@@ -10,7 +10,7 @@ store the list of possible choices for every list of literal types in saga
 
 class Options:
     unitOptions = (
-        ("Warlord","Warlord"),
+        ("Hero","Hero"),
         ("Hearthguard", "Hearthguard"),
         ("Warrior","Warrior"),
         ("Levy","Levy")
@@ -32,11 +32,11 @@ class Options:
         ("Horse","Horse"),
         ("Horse, Cataphract","Horse, Cataphract"),
         ("Horse, Composite Bows","Horse, Composite Bows"),
-        ("Horse, Javelin","Horse, Javelin"),
+        ("Horse, Javelins","Horse, Javelins"),
 
         #Camel + Equipment Section
         ("Camel, Composite Bows","Camel, Composite Bows"),
-        ("Camel, Javelin","Camel, Javelin"),
+        ("Camel, Javelins","Camel, Javelins"),
 
         #Represents No Special Equipment
         ("-","-"),

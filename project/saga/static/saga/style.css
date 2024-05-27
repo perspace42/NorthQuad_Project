@@ -1,0 +1,16 @@
+table {
+    /*Border For Display Tables*/
+    border-collapse: collapse;
+    border: 1px solid black;
+
+    /*Width For Display Tables*/
+    table-layout: fixed;
+    
+}
+
+th,td{
+    /*Border For Display Tables*/
+    border: 1px solid black;
+    padding: 2px;
+}
+

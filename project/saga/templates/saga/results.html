@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <!--
 Author: Scott Field
-Date: 5/24/2024
+Date: 5/26/2024
 Version: 1.0
 Purpose:
-Allow the user to view a faction they have selected, and edit that faction if they are 
-the user that created that faction
+Allow the user to view a faction they have selected.
 -->
-
 <html lang="en">
+<!--Get The CSS styling-->
+{% load static %}
+<link rel="stylesheet" href = "{%static 'saga/style.css'%}">
 
 <head>
     <title>Saga Faction View Page</title>
@@ -17,100 +18,70 @@ the user that created that faction
 </head>
 
 <body>
-    {% if unitList %}
+    {% if faction %}
         <header>
             <!--In this case the first object in the QuerySet is the only object in the QuerySet-->
             <h1>{{faction.first.name}}</h1>
         </header>
 
         <p1>
+            <!--Same thing here-->
             {{faction.first.description}}
         </p1>
+
+        <!--If their are any special rules list them-->
+        {%if faction.first.specialRules != "-"%}
+          <br><br>
+          <h3>Special Rules</h3>
+          <p1>{{faction.first.specialRules}}</p1>
+        {%endif%}
+        
 
         <!--Split Sections-->
         <br><br>
 
         <!--Table To Display Selected Faction-->
         <main>
-            Faction Table
             <table>
                 <tr>
-                  <th>Unit</th>
                   <th>Type</th>
+                  <th>Unit</th>
+                  <th>Saga Dice</th>
+                  <th>Models</th>
                   <th>Equipment Options</th>
-                  <th>Armour</th>
-                  <th>Melee (Shooting)</th>
-                  <th>Aggression</th>
-                  <th>Melee(Shooting)</th>
+                  <th>Armour Melee</th>
+                  <th>Armour Ranged</th>
+                  <th>Aggression Melee</th>
+                  <th>Aggression Ranged</th>
                   <th>Special Rules</th>
+                  <th>Legendary?</th>
+                  <th>Cost</th>
                 </tr>
-                <tr>
-                  <td>Consul</td>
-                  <td>-</td>
-                  <td>5 (5)</td>
-                  <td>8</td>
-                  <td></td>
-                  <td></td>
-                  <td>Warlord</td>
-                </tr>
-                <tr>
-                  <td>Consul</td>
-                  <td>Horse</td>
-                  <td>5 (4)</td>
-                  <td>8</td>
-                  <td></td>
-                  <td></td>
-                  <td>Warlord, Mount (Horse)</td>
-                </tr>
-                <tr>
-                  <td>Tribune</td>
-                  <td>Horse</td>
-                  <td>5 (4)</td>
-                  <td>2</td>
-                  <td></td>
-                  <td></td>
-                  <td>Warlord, Mount (Horse)</td>
-                </tr>
-                <tr>
-                  <td>Hearthguards</td>
-                  <td>-</td>
-                  <td>5 (5)</td>
-                  <td>2</td>
-                  <td></td>
-                  <td></td>
-                  <td>Maniples</td>
-                </tr>
-                <tr>
-                  <td>Warriors</td>
-                  <td>-</td>
-                  <td>4 (4)</td>
-                  <td>1</td>
-                  <td></td>
-                  <td></td>
-                  <td>Maniples</td>
-                </tr>
-                <tr>
-                  <td>Warriors</td>
-                  <td>Horse</td>
-                  <td>4 (3)</td>
-                  <td>1</td>
-                  <td></td>
-                  <td></td>
-                  <td>Mount (Horse), one unit per warband</td>
-                </tr>
-                <tr>
-                  <td>Levies</td>
-                  <td>Javelins</td>
-                  <td>3 (4)</td>
-                  <td>1/3 (1/2)</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
+                <!--Populate Table Data-->
+                <!--Get the QuerySet containing the units -->
+                {% for collection in unitSet %}
+                  <!-- Get the unit from the QuerySet -->
+                  {% for unit in collection %}
+                    <tr>
+                      <td>{{unit.unitType}}</td>
+                      <td>{{unit.unitName}}</td>
+                      <td>{{unit.sagaDice}}</td>
+                      <td>{{unit.numModels}}</td>
+                      <td>{{unit.equipment}}</td>
+                      <td>{{unit.armourMelee}}</td>
+                      <td>{{unit.armourRanged}}</td>
+                      <td>{{unit.aggMelee}}</td>
+                      <td>{{unit.aggRanged}}</td>
+                      <td>{{unit.specialRules}}</td>
+                      <td>{{unit.isLegendary}}</td>
+                      <td>{{unit.cost}}</td>
+                    </tr>
+                  {% endfor %}
+                {% endfor %}
               </table>
         </main>
     {% else %}
-        Nothing contained in the unit list
+        Faction not found, change this to redirect
     {% endif %}
 </body>
 

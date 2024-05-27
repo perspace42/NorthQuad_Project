@@ -7,16 +7,14 @@ Defines the views for: Create, Read, Update, Delete, for the website
 (The Get, Post, Update and Delete Requests)
 '''
 
-from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect #Get / Send HttpResponse
-from django.http import Http404 #Error Message
-from django.shortcuts import render, get_object_or_404 #Shorten Instructions
-from django.urls import reverse
 
-from .models import Faction,Unit
+from django.shortcuts import render, redirect #shorten instructions
+from django.urls import reverse #enable generating urls from routes
+
+from .models import Faction, Unit
 
 
-# Create your views here.
+# Views Section
 
 #Home Page, (GET Faction)
 def index(request):
@@ -27,19 +25,72 @@ def index(request):
 
 #Results View Page, (GET Units that are in a Faction)
 def results(request,factionId):   
-    #Check if a faction is in the request
-    if factionId:
+    #Get Faction From FactionId
+    faction = Faction.objects.filter(id = factionId)
+    #If Any Factions Exist With The Given FactionId
+    if faction.count() > 0:
         #If so get the units in that faction and the faction name
         unitList = Unit.objects.filter(factionId = factionId)
-        faction = Faction.objects.filter(id = factionId)
-        #If antything is in the list
-        if unitList:
-            context = {"unitList" : unitList, "faction" : faction}
+        #If antything is in the unit list
+        if unitList.count() > 0:
+            #Split unit list into alphabetically ordered unit types
+            heroList = Unit.objects.filter(unitType = "Hero").order_by("unitName")
+            hearthguardList = Unit.objects.filter(unitType = "Hearthguard").order_by("unitName")
+            warriorList = Unit.objects.filter(unitType = "Warrior").order_by("unitName")
+            levyList = Unit.objects.filter(unitType = "Levy").order_by("unitName")
+
+            #The order of the unitSet will determine the order in which table units are displayed by type
+            unitSet = [heroList,hearthguardList,warriorList,levyList]
+            
+            context = {
+                "unitSet" :unitSet, 
+                "faction" : faction
+                }
             return render(request, "saga/results.html", context)
+        
+        #Faction Exists, Contains No Units
         else:
-            #return render(request,"saga/results.html", context = {"unitList" : unitList})
-            raise Http404("Error no units in UnitList")
+            return render(request, "saga/results.html")
+    
+    #Error Non Existent Faction
     else:
-        return render(request, "saga/results.html")
+        #Redirect To Home Page (Must be namespaced due to app name)
+        return redirect(reverse('saga:index'))
 
 #Edit/Create Page, (Edit Exiting Faction, Delete Faction)
+
+#If No Faction Supplied (Create New Faction)
+def create(request):
+
+    return render(request,"saga/edit.html")
+
+#If Faction Supplied (Edit Existing Faction)
+
+def edit(request,factionId):
+    #Get Faction From FactionId
+    faction = Faction.objects.filter(id = factionId)
+    #If Any Factions Exist With The Given FactionId
+    if faction.count() > 0:
+        #If so get the units in that faction and the faction name
+        unitList = Unit.objects.filter(factionId = factionId)
+        #If antything is in the unit list
+        if unitList.count() > 0:
+            #Split unit list into alphabetically ordered unit types
+            heroList = Unit.objects.filter(unitType = "Hero").order_by("unitName")
+            hearthguardList = Unit.objects.filter(unitType = "Hearthguard").order_by("unitName")
+            warriorList = Unit.objects.filter(unitType = "Warrior").order_by("unitName")
+            levyList = Unit.objects.filter(unitType = "Levy").order_by("unitName")
+
+            #The order of the unitSet will determine the order in which table units are displayed by type
+            unitSet = [heroList,hearthguardList,warriorList,levyList]
+            
+            context = {
+                "unitSet" :unitSet, 
+                "faction" : faction
+                }
+            return render(request, "saga/edit.html", context)
+    
+    #Error Non Existent Faction
+    else:
+        #Redirect To Create Page (Must be namespaced due to app name)
+        return redirect(reverse('saga:create'))

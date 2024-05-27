@@ -29,10 +29,17 @@ class Unit(models.Model):
     #The amount of dice a unit generates at the start of the turn
     sagaDice = models.PositiveIntegerField(default = 1)
 
+    #The cost to recruit a unit
+    cost = models.PositiveIntegerField(default = 1)
+
     #Can be: Hero, Hearthguard, Warrior, Levy (default is Hero)
     unitType = models.CharField(max_length = 20, default = "Hearthguard", choices=So.unitOptions)
 
+    #The name of a unit
     unitName = models.CharField(max_length = 50, default = "Hearthguard")
+
+    #The number of models a unit contains
+    numModels = models.PositiveIntegerField(default = 4)
 
     #Equipment is a list of any equipment unit contains
     equipment = models.CharField(max_length = 50, default = "-", choices=So.equipmentOptions)
