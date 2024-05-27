@@ -12,7 +12,7 @@ from django.shortcuts import render, redirect #shorten instructions
 from django.urls import reverse #enable generating urls from routes
 
 from .models import Faction, Unit
-
+from sagaoptions import Default, Options
 
 # Views Section
 
@@ -43,7 +43,7 @@ def results(request,factionId):
             unitSet = [heroList,hearthguardList,warriorList,levyList]
             
             context = {
-                "unitSet" :unitSet, 
+                "unitSet" : unitSet, 
                 "faction" : faction
                 }
             return render(request, "saga/results.html", context)
@@ -61,8 +61,11 @@ def results(request,factionId):
 
 #If No Faction Supplied (Create New Faction)
 def create(request):
-
-    return render(request,"saga/edit.html")
+    context = {
+        "defaultUnits" : Default.units,
+        "equipment" : Options.equipmentOptions
+    }
+    return render(request,"saga/edit.html", context)
 
 #If Faction Supplied (Edit Existing Faction)
 
@@ -86,7 +89,8 @@ def edit(request,factionId):
             
             context = {
                 "unitSet" :unitSet, 
-                "faction" : faction
+                "faction" : faction,
+                "equipment" : Options.equipmentOptions
                 }
             return render(request, "saga/edit.html", context)
     

@@ -10,20 +10,94 @@ Allow the user to edit a faction and its units if one is supplied
 <html lang="en">
 <!--Get The CSS styling-->
 {% load static %}
+<!--Get The Cross-Site Request Forgery Prevention Token-->
+{% csrf_token %}
+<!--Get The CSS styling-->
 <link rel="stylesheet" href = "{%static 'saga/style.css'%}">
 
 <head>
     <title>Saga Faction Create/Edit</title>
     <meta charset="utf-8">
     <meta name = "description" content = "The Saga Faction Create/Edit page is to create or edit a faction">
+    <script src = {% static 'saga/edit.js'%}></script>
 </head>
 
 <body>
+    <!--If a Faction Has Been Provided, The Page Is For Editing-->
     {% if faction%}
-    This is the edit faction page
+    <h1>Edit Faction</h1>
     {% else %}
-    This is the create faction page
+    <!--If a Faction Has Not Been Provided, The Page Is For Creating-->
+    <h1>Create Faction</h1>
     {% endif %}
+
+    <!--Faction Input Fields-->
+    <label for = "fName">Name:</label>
+    <input type = "text" id = "fName" value = {{faction.first.name}} >
+    <br><br>
+    <div style="display: flex; flex-direction: column;">
+        <label for = "fDescription">Description:</label>
+        <textarea id = "fDescription" rows = "5", cols = "30">{{faction.first.description}}</textarea>
+        <br>
+        <label for = "fSpecial">Special Rules:</label>
+        <textarea id = "fSpecial" rows = "5", cols = "30">{{faction.first.specialRules}}</textarea>
+    </div>
+
+    <br>
+    <h2>Units</h2>
+    <div class = "addButtonBox">
+        <button class = "addButton"> Add Hero</button>
+        <button class = "addButton"> Add Hearthguard</button>
+        <button class = "addButton"> Add Warrior</button>
+        <button class = "addButton"> Add Levy</button>
+    </div>
+    <!--Unit Input Fields-->
+    <div style = "width: 75%; margin: 0 auto;">
+        <!--This is the outer table-->
+        <table>
+            <tr>
+            <th>Type</th>
+            <th>Unit</th>
+            <th>Saga Dice</th>
+            <th>Models</th>
+            <th>Equipment Options</th>
+            <th>Armour Melee</th>
+            <th>Armour Ranged</th>
+            <th>Aggression Melee</th>
+            <th>Aggression Ranged</th>
+            <th>Special Rules</th>
+            <th>Legendary?</th>
+            <th>Cost</th>
+            </tr>
+        
+            <!--Populate Table Data-->
+            <!--Get the QuerySet containing the units -->
+            {% for collection in unitSet %}
+                
+            <!-- Get the unit from the QuerySet -->
+                {% for unit in collection %}
+                    <tr>
+                        <td>{{unit.unitType}}</td>
+                        <td>{{unit.unitName}}</td>
+                        <td>{{unit.sagaDice}}</td>
+                        <td>{{unit.numModels}}</td>
+                        <td>{{unit.equipment}}</td>
+                        <td>{{unit.armourMelee}}</td>
+                        <td>{{unit.armourRanged}}</td>
+                        <td>{{unit.aggMelee}}</td>
+                        <td>{{unit.aggRanged}}</td>
+                        <td>{{unit.specialRules}}</td>
+                        <td>{{unit.isLegendary}}</td>
+                        <td>{{unit.cost}}</td>
+                        <!--Delete Button-->
+                        <td><button class = "deleteRow">Delete</button></td>
+                    </tr>
+                {% endfor %}
+                
+            {% endfor %}
+        </table>
+    </div>
+
 </body>
 
 </html>

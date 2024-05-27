@@ -3,11 +3,11 @@ Author: Scott Field
 Version: 1.0
 Date: 5/24/2024
 Purpose:
-store the list of possible choices for every list of literal types in saga
+store the list of possible choices for every useful list of literal types in saga
 '''
 
+#The available keywords for units and equipment
 #Syntax is: (DB Value, User Value)
-
 class Options:
     unitOptions = (
         ("Hero","Hero"),
@@ -41,3 +41,29 @@ class Options:
         #Represents No Special Equipment
         ("-","-"),
     )
+
+#Function to shorten creation of unit:
+def createUnit(sagaDice,cost,unitType,unitName,numModels,equipment,armourMelee,armourRanged,aggMelee,aggRanged,specialRules,isLegendary):
+    return {
+        "sagaDice" : sagaDice,
+        "cost " : cost,
+        "unitType" : unitType,
+        "unitName" : unitName,
+        "numModels" : numModels,
+        "equipment" : equipment,
+        "armourMelee" : armourMelee,
+        "armourRanged" : armourRanged,
+        "aggMelee" : aggMelee,
+        "aggRanged" : aggRanged,
+        "specialRules" : specialRules,
+        "isLegendary" : isLegendary
+    }
+
+#The default values for a unit when creating a new faction
+class Default:
+    units = [
+        createUnit(1,0,"Hero","Warlord",1,"-",5,5,8,0,"-",False),
+        createUnit(1,1,"Hearthguard","Hearthguard",4,"-",5,5,2,0,"-",False),
+        createUnit(1,1,"Warrior","Warrior",8,"-",4,4,1,0,"-",False),
+        createUnit(1,1,"Levy","Levy",12,"-",4,4,1,0,"-",False)
+    ]

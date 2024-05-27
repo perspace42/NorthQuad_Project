@@ -14,3 +14,28 @@ th,td{
     padding: 2px;
 }
 
+textarea{
+    vertical-align: top;
+}
+
+/*For The Button To Delete The Table Rows On Click*/
+.deleteRow{
+    color: red;
+}
+
+
+
+/*For The Container To Hold The Add Unit Buttons*/
+.addButtonBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addButton{
+    color: green;
+    margin-right: 5;
+    margin-left: 5;
+}
+
+
