@@ -77,7 +77,13 @@ Allow the user to edit a faction and its units if one is supplied
             <!-- Get the unit from the QuerySet -->
                 {% for unit in collection %}
                     <tr>
-                        <td>{{unit.unitType}}</td>
+                        <td>
+                            <select>
+                                {% for tuple in options.unitOptions %}
+                                    <option value = "{{ tuple.0 }}" {%if tuple.1 == unit.unitType %} selected {%endif%}>{{tuple.1}}</option>     
+                                {% endfor %}
+                            </select>
+                        </td>
                         <td>{{unit.unitName}}</td>
                         <td>{{unit.sagaDice}}</td>
                         <td>{{unit.numModels}}</td>

@@ -63,7 +63,7 @@ def results(request,factionId):
 def create(request):
     context = {
         "defaultUnits" : Default.units,
-        "equipment" : Options.equipmentOptions
+        "options" : Options
     }
     return render(request,"saga/edit.html", context)
 
@@ -90,7 +90,7 @@ def edit(request,factionId):
             context = {
                 "unitSet" :unitSet, 
                 "faction" : faction,
-                "equipment" : Options.equipmentOptions
+                "options" : Options
                 }
             return render(request, "saga/edit.html", context)
     
