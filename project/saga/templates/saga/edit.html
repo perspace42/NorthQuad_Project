@@ -50,8 +50,11 @@ Allow the user to edit a faction and its units if one is supplied
         <h2>Units</h2>
         <!--Submit / Delete Form -->
         <div class = "submitButtonBox">
-            <button id = "saveSubmit" type = "submit">Save Changes</button>
-            <button id = "deleteSubmit" type = "submit">Delete Faction</button>
+            <button id = "saveSubmit"   type = "submit">Save Changes</button>
+            <!--It is only possible to delete a faction that has already been created-->
+            {% if faction %}
+                <button id = "deleteSubmit" type="button" onclick="submitDeleteForm('{% url 'saga:delete' factionId=faction.first.id %}')">Delete Faction</button>
+            {% endif %}
         </div>
         <!--Table Container -->
         <div style = "width: 75%; margin: 0 auto;">

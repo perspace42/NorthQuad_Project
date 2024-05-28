@@ -16,6 +16,13 @@ function getCSRF() {
   return null;
 }
 
+function submitDeleteForm(url) {
+    var form = document.getElementById('factionForm');
+    form.action = url;
+    console.log("Delete Faction Button Pressed")
+    form.submit();
+}
+
 //After document has loaded, run the rest of the JavaScript
 document.addEventListener('DOMContentLoaded', function(){
     //Get Elements Section
@@ -76,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function(){
     The first is for saving changes to a faction and the second is for
     permenantly deleting a facition
     */
+    /*
     factionForm.addEventListener('submit', function(event) {
         //prevent the default form submission
         event.preventDefault(); 
@@ -84,9 +92,10 @@ document.addEventListener('DOMContentLoaded', function(){
             console.log("Save Changes Pressed");
             // Code to handle form submission and save changes to the database
         }
-        //Otherwise if the Delete changes button is clicked
+        
         else if(event.submitter === deleteSubmit){
             console.log("Delete Faction Pressed");
+            
             //Attempt to send data to server
             fetch(`/saga/delete/${factionId.value}/`, {
                 method: 'POST',
@@ -108,9 +117,11 @@ document.addEventListener('DOMContentLoaded', function(){
                 console.error('Error:', error);
             });
         }
+        
         //Otherwise if neither approved button submitted the form something went wrong
-        else {
+        else {//Otherwise if neither approved button submitted the form something went wrong
             console.log(event.submitter, "somehow submitted the form, check and correct the code near that element");
         }
     })
+    */
 });
