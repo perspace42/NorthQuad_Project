@@ -65,7 +65,7 @@ def create(request):
         "defaultUnits" : Default.units,
         "options" : Options
     }
-    return render(request,"saga/edit.html", context)
+    return render(request,"saga/create.html", context)
 
 #If Faction Supplied (Edit Existing Faction)
 def edit(request,factionId):

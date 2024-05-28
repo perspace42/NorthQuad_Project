@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <!--
 Author: Scott Field
 Date: 5/26/2024
@@ -17,12 +16,13 @@ Allow the user to edit a faction and its units if one is supplied
     <title>Saga Faction Create/Edit</title>
     <meta charset="utf-8">
     <meta name = "description" content = "The Saga Faction Create/Edit page is to create or edit a faction">
-    <script src = {% static 'saga/edit.js'%}></script>
+    <script src = {% static 'saga/create.js'%}></script>
 </head>
 
 <body>
-    <h1>Edit Faction</h1>
-  
+    <!--If a Faction Has Not Been Provided, The Page Is For Creating-->
+    <h1>Create Faction</h1>
+    
     <!--Form Start-->
     <form id = "factionForm" method = "post">
         <!--Get The Cross-Site Request Forgery Prevention Token (Necessary Inside Form Otherwise Post Request Will Be Blocked)-->
@@ -45,7 +45,6 @@ Allow the user to edit a faction and its units if one is supplied
         <!--Submit / Delete Form -->
         <div class = "submitButtonBox">
             <button id = "saveSubmit"   type = "submit">Save Changes</button>
-            <button id = "deleteSubmit" type="button" onclick="submitDeleteForm('{% url 'saga:delete' factionId=faction.first.id %}')">Delete Faction</button>     
         </div>
         <!--Table Container -->
         <div style = "width: 75%; margin: 0 auto;">
