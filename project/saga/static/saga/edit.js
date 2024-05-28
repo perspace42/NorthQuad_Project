@@ -5,6 +5,8 @@ console.log("edit.js loaded successfully");
 This function is to retrieve a cookie (the CSRF token), which is needed
 to validate post requests
 */
+
+/*
 function getCSRF() {
     const cookies = document.cookie.split('; ');
     for (let i = 0; i < cookies.length; i++) {
@@ -15,6 +17,7 @@ function getCSRF() {
     }
   return null;
 }
+*/
 
 function submitDeleteForm(url) {
     var form = document.getElementById('factionForm');
@@ -22,6 +25,7 @@ function submitDeleteForm(url) {
     console.log("Delete Faction Button Pressed")
     form.submit();
 }
+
 
 //After document has loaded, run the rest of the JavaScript
 document.addEventListener('DOMContentLoaded', function(){
@@ -78,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function(){
         button.addEventListener('click', deleteRow);
     });
 
+    
     /*
     This is the section for the form and its custom submission handlers
     The first is for saving changes to a faction and the second is for
@@ -124,4 +129,6 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     })
     */
+
+
 });

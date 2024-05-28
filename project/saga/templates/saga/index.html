@@ -23,8 +23,8 @@ deleted if the user was the original poster of that faction
 
     <p1>Welcome to the Saga Faction Builder.
         <br> click the <b>Create Faction</b> button to develop a new Faction to post to the website
-        <br> click the <b>View Faction</b> button to view a Selected Faction, or to View then Edit an Existing Faction posted by you.
-        <br> (users can only edit factions they have posted)
+        <br> click the <b>View Faction</b> button to view a Selected Faction,
+        <br> click the <b>Edit Faction</b> button to edit a Selected Faction
     </p1>
 
     <!--Split Sections-->
@@ -33,15 +33,22 @@ deleted if the user was the original poster of that faction
     <!--Form To Display Available Factions-->
     <main>
         {% if factionList %}
-        <label>Edit a Faction: </label><button>Create Faction</button>
-            <form method = "post" id = "factionForm"> 
+            <!--For Create Faction-->
+            <label for = "createFaction">Create a Faction:</label>
+            <a href = "{% url 'saga:create' %}" >
+                <button id = "createFaction">Create Faction</button>
+            </a>
+            <form method = "post" id = "factionForm">
+                <!--Get The Cross-Site Request Forgery Prevention Token (Necessary Inside Form Otherwise Post Request Will Be Blocked)-->
+                {% csrf_token %}
                 <label for="factionChoice">Select a Faction:</label>
                     <select id="factionChoice" name="faction">
                         {% for faction in factionList %}
                             <option value={{faction.id}}> {{faction.name}} </option>
                         {% endfor %}
                     </select>
-                <button type="submit" id = "viewFactionButton">View Faction</button>
+                <button type = "button" id = "viewFactionButton" onclick="viewFaction()">View Faction</button>
+                <button type = "button" id = "editFactionButton" onclick="editFaction()">Edit Faction</button>
             </form>
         {% else %}
             <p>No Factions Available To Edit</p>
@@ -50,21 +57,39 @@ deleted if the user was the original poster of that faction
 </body>
 
 <script>
-        //get form elements
-        const factionForm = document.getElementById('factionForm');
-        const factionChoice = document.getElementById('factionChoice');
-        const viewFactionButton = document.getElementById("viewFactionButton");
-
-        //If the factionForm is present
-        if (factionForm) {
-          console.log("Form is present");
-          //function must be asynchronous
-          factionForm.addEventListener('submit', function(event) {
+    document.addEventListener('DOMContentLoaded', function(){
+        factionForm.addEventListener('submit', function(event) {
             //prevent the default form submission
             event.preventDefault(); 
-          });
-        }
-        
+        });
+    });
+
+    function submitTo(target){
+        //Log Button Push
+        console.log("View Faction Button Pressed")
+        //Get Form
+        var form = document.getElementById('factionForm');
+        //Get Selected Faction Id
+        factionId = document.getElementById('factionChoice').value
+        //Get Current URL
+        currentUrl = new URL(window.location.href);
+        //From Current URL build destination URL
+        destUrl = new URL(`${currentUrl.origin}${currentUrl.pathname}${target}/${factionId}`);
+        //Set Form To Go To Selected Faction Id On Submit
+        form.action = destUrl;
+        //Submit Form
+        form.submit();
+    }
+
+    //Generate the url to, then submit the faction form to the View Page
+    function viewFaction() {
+        submitTo("results");
+    }
+
+    //Generate the url to, then submit the faction form to the Edit Page
+    function editFaction(){
+        submitTo("edit")
+    }
 </script>
 
 </html>
