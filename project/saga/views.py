@@ -29,15 +29,15 @@ def results(request,factionId):
     faction = Faction.objects.filter(id = factionId)
     #If Any Factions Exist With The Given FactionId
     if faction.count() > 0:
-        #If so get the units in that faction and the faction name
-        unitList = Unit.objects.filter(factionId = factionId)
+        #If so get the units in that faction whose factionId matches the foreign key: id (factionId__id) from Faction
+        unitList = Unit.objects.filter(factionId__id = factionId)
         #If antything is in the unit list
         if unitList.count() > 0:
             #Split unit list into alphabetically ordered unit types
-            heroList = Unit.objects.filter(unitType = "Hero").order_by("unitName")
-            hearthguardList = Unit.objects.filter(unitType = "Hearthguard").order_by("unitName")
-            warriorList = Unit.objects.filter(unitType = "Warrior").order_by("unitName")
-            levyList = Unit.objects.filter(unitType = "Levy").order_by("unitName")
+            heroList = Unit.objects.filter(factionId__id = factionId, unitType = "Hero").order_by("unitName")
+            hearthguardList = Unit.objects.filter(factionId__id = factionId, unitType = "Hearthguard").order_by("unitName")
+            warriorList = Unit.objects.filter(factionId__id = factionId, unitType = "Warrior").order_by("unitName")
+            levyList = Unit.objects.filter(factionId__id = factionId, unitType = "Levy").order_by("unitName")
 
             #The order of the unitSet will determine the order in which table units are displayed by type
             unitSet = [heroList,hearthguardList,warriorList,levyList]
@@ -74,15 +74,15 @@ def edit(request,factionId):
     faction = Faction.objects.filter(id = factionId)
     #If Any Factions Exist With The Given FactionId
     if faction.count() > 0:
-        #If so get the units in that faction and the faction name
-        unitList = Unit.objects.filter(factionId = factionId)
+        #If so get the units in that faction whose factionId matches the foreign key: id (factionId__id) from Faction
+        unitList = Unit.objects.filter(factionId__id = factionId)
         #If antything is in the unit list
         if unitList.count() > 0:
             #Split unit list into alphabetically ordered unit types
-            heroList = Unit.objects.filter(unitType = "Hero").order_by("unitName")
-            hearthguardList = Unit.objects.filter(unitType = "Hearthguard").order_by("unitName")
-            warriorList = Unit.objects.filter(unitType = "Warrior").order_by("unitName")
-            levyList = Unit.objects.filter(unitType = "Levy").order_by("unitName")
+            heroList = Unit.objects.filter(factionId__id = factionId, unitType = "Hero").order_by("unitName")
+            hearthguardList = Unit.objects.filter(factionId__id = factionId, unitType = "Hearthguard").order_by("unitName")
+            warriorList = Unit.objects.filter(factionId__id = factionId, unitType = "Warrior").order_by("unitName")
+            levyList = Unit.objects.filter(factionId__id = factionId, unitType = "Levy").order_by("unitName")
 
             #The order of the unitSet will determine the order in which table units are displayed by type
             unitSet = [heroList,hearthguardList,warriorList,levyList]
