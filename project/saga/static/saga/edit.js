@@ -1,26 +1,26 @@
 //Log if file has been accessed
 console.log("edit.js loaded successfully");
 
-//After document has loaded, run JavaScript
+//After document has loaded, run the rest of the JavaScript
 document.addEventListener('DOMContentLoaded', function(){
+    //Get Elements Section
+
     //Get CSRF Token
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
     //Get the current Delete Buttons (Is not a const as new delete buttons may be added with their rows)
     deleteButtons = document.querySelectorAll('.deleteRow');
-
-    //Track the rows to delete from the database
-    let deleteRows = [];
-
-    //Track the rows to add to the database
-    let addRows = [];
+    //Get the page form
+    factionForm = document.getElementById("factionForm")
 
     /*
     This section is for the Delete Button on selection it will turn the table row to be deleted grey
     however it will also switch to a cancel button that can reverse the deletion operation
-    the row will only be submitted or deleted after the submit button has been clicked
+    a row will only be submitted / deleted after the Save Changes button has been clicked
     */
-    
+
+    //Track the rows to delete from the database
+    let deleteRows = [];
+
     //Function To select Table Row for deletion on submit when Button Press
     function deleteRow(event) {
         row = event.target.closest('tr');
@@ -49,5 +49,11 @@ document.addEventListener('DOMContentLoaded', function(){
     deleteButtons.forEach(button => {
         button.addEventListener('click', deleteRow);
     });
+
+    /*This is the section for the form and its custom submission handler */
+    factionForm.addEventListener('submit', function(event) {
+        //prevent the default form submission
+        event.preventDefault(); 
+      });
 
 });

@@ -14,15 +14,28 @@ th,td{
     
 }
 
+/*shrink input fields that do not need their full size*/
+.shrinkInput{
+    box-sizing: border-box;
+    width: 7ch;
+    margin: auto;
+}
+
 textarea{
     vertical-align: top;
 }
 
-/*For The Button To Delete The Table Rows On Click*/
+/*For The Button To Select The Table Rows To Be Deleted On Click*/
 .deleteRow{
     color: red;
 }
 
+/*For The Buttons That Add Units To The Table (and the form)*/
+.addButton{
+    color: green;
+    margin-right: 5;
+    margin-left: 5;
+}
 
 
 /*For The Container To Hold The Add Unit Buttons*/
@@ -30,21 +43,31 @@ textarea{
     display: flex;
     justify-content: center;
     align-items: center;
+    gap:10px;
+    margin-bottom:10px;
 }
 
-.addButton{
-    color: green;
-    margin-right: 5;
-    margin-left: 5;
+/*For The Container of Both Form Submit Buttons*/
+.submitButtonBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin-bottom: 35px;
+    margin-top: 0px;
 }
 
-/*shrink input fields that do not need their full size*/
-.shrinkInput{
-    box-sizing: border-box;
-    width: 6ch;
-    margin: auto;
+#saveSubmit{
+    background-color: rgb(39, 138, 39);
+    height: 50px;
+    width: 175px;
 }
 
+#deleteSubmit{
+    background-color: rgba(196, 12, 12, 0.685);
+    height: 50px;
+    width: 175px;
+}
 
 
 
