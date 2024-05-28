@@ -1,24 +1,6 @@
 //Log if file has been accessed
 console.log("edit.js loaded successfully");
 
-/*
-This function is to retrieve a cookie (the CSRF token), which is needed
-to validate post requests
-*/
-
-/*
-function getCSRF() {
-    const cookies = document.cookie.split('; ');
-    for (let i = 0; i < cookies.length; i++) {
-        const [name, value] = cookies[i].split('=');
-        if (name === "csrfToken") {
-            return decodeURIComponent(value);
-        }
-    }
-  return null;
-}
-*/
-
 function submitDeleteForm(url) {
     var form = document.getElementById('factionForm');
     form.action = url;
@@ -52,26 +34,33 @@ document.addEventListener('DOMContentLoaded', function(){
     let deleteRows = [];
 
     //Function To select Table Row for deletion on submit when Button Press
-    function deleteRow(event) {
+    function deleteRow(event){
+        //Find the closest row
         row = event.target.closest('tr');
-        button = event.target;
+        //Find the database Id of the Unit represented by that row
+        inputTag = row.querySelector("input[name='unitId']");
+        id = inputTag.value;
+        //Get the specific delete button that was clicked
+        deleteButton = event.target;
 
         // Check if the row is already grayed out
-        if (deleteRows.includes(row)) {
+        if (deleteRows.includes(id)){
             // If grayed out, revert the row to its original color
             row.style.backgroundColor = '';
-            button.textContent = 'Delete';
-            button.style.color = 'red';
+            deleteButton.textContent = 'Delete';
+            deleteButton.style.color = 'red';
             // Remove the row from the deleteRows array
-            deleteRows.splice(deleteRows.indexOf(row), 1); 
-        } else {
+            deleteRows.splice(deleteRows.indexOf(id), 1); 
+        }else{
             // If not grayed out, gray out the row
             row.style.backgroundColor = 'grey';
-            button.textContent = 'Cancel';
-            button.style.color = 'black';
+            deleteButton.textContent = 'Cancel';
+            deleteButton.style.color = 'black';
              // Add the row to the greyedOutRows array
-            deleteRows.push(row);
+            deleteRows.push(id);
         }
+        //Push to the console which rows are to be deleted
+        console.log("Delete Rows:", deleteRows)
     }
 
     //Get All Of The Delete Buttons (Is not a const as new delete buttons may be added / removed as new rows are added / removed)
@@ -81,54 +70,4 @@ document.addEventListener('DOMContentLoaded', function(){
     deleteButtons.forEach(button => {
         button.addEventListener('click', deleteRow);
     });
-
-    
-    /*
-    This is the section for the form and its custom submission handlers
-    The first is for saving changes to a faction and the second is for
-    permenantly deleting a facition
-    */
-    /*
-    factionForm.addEventListener('submit', function(event) {
-        //prevent the default form submission
-        event.preventDefault(); 
-        //If the Save Changes button is clicked
-        if (event.submitter === saveSubmit){
-            console.log("Save Changes Pressed");
-            // Code to handle form submission and save changes to the database
-        }
-        
-        else if(event.submitter === deleteSubmit){
-            console.log("Delete Faction Pressed");
-            
-            //Attempt to send data to server
-            fetch(`/saga/delete/${factionId.value}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCSRF(),
-                },
-            })
-            //Get response from server
-            .then(response => {
-                if (response.ok) {
-                    console.log('Faction deleted successfully');
-                } else {
-                    //If a problem occurred display the response
-                    console.error('Error deleting faction',response);
-                }
-            })
-            //If There is an error output it
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-        
-        //Otherwise if neither approved button submitted the form something went wrong
-        else {//Otherwise if neither approved button submitted the form something went wrong
-            console.log(event.submitter, "somehow submitted the form, check and correct the code near that element");
-        }
-    })
-    */
-
-
 });
