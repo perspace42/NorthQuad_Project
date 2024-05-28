@@ -57,7 +57,7 @@ def results(request,factionId):
         #Redirect To Home Page (Must be namespaced due to app name)
         return redirect(reverse('saga:index'))
 
-#Edit/Create Page, (Edit Exiting Faction, Delete Faction)
+#Edit/Create Page, (Edit/Delete Exiting Faction)
 
 #If No Faction Supplied (Create New Faction)
 def create(request):
@@ -68,7 +68,6 @@ def create(request):
     return render(request,"saga/edit.html", context)
 
 #If Faction Supplied (Edit Existing Faction)
-
 def edit(request,factionId):
     #Get Faction From FactionId
     faction = Faction.objects.filter(id = factionId)
@@ -98,3 +97,23 @@ def edit(request,factionId):
     else:
         #Redirect To Create Page (Must be namespaced due to app name)
         return redirect(reverse('saga:create'))
+
+
+#Delete Faction (From Edit Page)
+def delete(request,factionId):
+    #Get Faction To Delete
+    faction = Faction.objects.filter(id = factionId)
+    #If Faction Exists and Data has been posted from a form
+    if faction.count() > 0 and request.method == 'POST':
+        #Delete the faction
+        faction.delete()
+        #Return to create page on success (Will change to success message later)
+        return redirect(reverse("saga:create"))
+    
+    #Return to home page on failure (Will change to failure message later)
+    return redirect(reverse("saga:index"))    
+
+
+#Push Changes To Faction (From Edit Page)
+def push(request,factionId):
+    pass

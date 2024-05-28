@@ -19,5 +19,8 @@ urlpatterns = [
     #ex: /saga/edit/
     path("create/", views.create, name = 'create'),
     #ex: /saga/edit/1
-    path("edit/<int:factionId>", views.edit, name = 'edit')  
+    path("edit/<int:factionId>", views.edit, name = 'edit'),  
+    #ex: /saga/delete/1
+    path("delete/<int:factionId>", views.delete, name = 'delete')
+    #ex: /saga/edit/push/?
 ]

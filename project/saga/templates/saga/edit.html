@@ -10,8 +10,6 @@ Allow the user to edit a faction and its units if one is supplied
 <html lang="en">
 <!--Get The CSS styling-->
 {% load static %}
-<!--Get The Cross-Site Request Forgery Prevention Token-->
-{% csrf_token %}
 <!--Get The CSS styling-->
 <link rel="stylesheet" href = "{%static 'saga/style.css'%}">
 
@@ -31,8 +29,11 @@ Allow the user to edit a faction and its units if one is supplied
     <h1>Create Faction</h1>
     {% endif %}
 
-    <!--Faction Form Fields-->
-    <form id = "factionForm">
+    <!--Form Start-->
+    <form id = "factionForm" method = "post">
+        <!--Get The Cross-Site Request Forgery Prevention Token (Necessary Inside Form Otherwise Post Request Will Be Blocked)-->
+        {% csrf_token %}
+        <!--Faction Form Fields-->
         <label for = "fName">Name:</label>
         <!--autoescape to read spaces in the faction name-->
         <input type = "text" id = "fName" value = "{% autoescape off %}{{faction.first.name}}{% endautoescape %}">
@@ -49,20 +50,20 @@ Allow the user to edit a faction and its units if one is supplied
         <h2>Units</h2>
         <!--Submit / Delete Form -->
         <div class = "submitButtonBox">
-            <button id = "saveSubmit">Save Changes</button>
-            <button id = "deleteSubmit">Delete Faction</button>
+            <button id = "saveSubmit" type = "submit">Save Changes</button>
+            <button id = "deleteSubmit" type = "submit">Delete Faction</button>
         </div>
         <!--Table Container -->
         <div style = "width: 75%; margin: 0 auto;">
             <!--Buttons To Add Units To The Table-->
             <div class = "addButtonBox">
-                <button class = "addButton" id = "addHero"> Add Hero</button>
-                <button class = "addButton" id = "addHearthguard"> Add Hearthguard</button>
-                <button class = "addButton" id = "addWarrior"> Add Warrior</button>
-                <button class = "addButton" id = "addLevy"> Add Levy</button>
+                <button class = "addButton" type = "button" id = "addHero"> Add Hero</button>
+                <button class = "addButton" type = "button" id = "addHearthguard"> Add Hearthguard</button>
+                <button class = "addButton" type = "button" id = "addWarrior"> Add Warrior</button>
+                <button class = "addButton" type = "button" id = "addLevy"> Add Levy</button>
             </div>
             <!--Store the hidden faction id field-->
-            <input type = "hidden" name = "factionId" value = "{{faction.first.id}}">
+            <input type = "hidden" id = "factionId" value = "{{faction.first.id}}">
             <!--Unit Form Fields-->
             <table>
                 <tr>
@@ -113,7 +114,7 @@ Allow the user to edit a faction and its units if one is supplied
                             <td><input type = "checkbox" name = "isLegendary" {%if unit.isLegendary %} checked {% endif %}></td>
                             <td><input type = "number" name = "cost" class = "shrinkInput" value = {{unit.cost}}></td>
                             <!--Delete Button-->
-                            <td><button class = "deleteRow">Delete</button></td>
+                            <td><button class = "deleteRow" type = "button">Delete</button></td>
                         </tr>
                     {% endfor %}   
                 {% endfor %}
