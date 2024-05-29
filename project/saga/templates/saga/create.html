@@ -37,14 +37,14 @@ Allow the user to edit a faction and its units if one is supplied
             <textarea id = "fDescription" name = "fDescription" rows = "5", cols = "30"></textarea>
             <br>
             <label for = "fSpecial">Special Rules:</label>
-            <textarea id = "fSpecial" name = "fSpecial" rows = "5", cols = "30" value = "-"></textarea>
+            <textarea id = "fSpecial" name = "fSpecial" rows = "5", cols = "30">-</textarea>
         </div>
 
         <br>
         <h2>Units</h2>
         <!--Submit / Delete Form -->
         <div class = "submitButtonBox">
-            <button id = "saveSubmit"   type = "submit">Create Faction</button>
+            <button id = "saveSubmit"   type="button" onclick="submitSaveForm('{% url 'saga:createPush' %}')">Create Faction</button>
         </div>
         <!--Table Container -->
         <div style = "width: 75%; margin: 0 auto;">

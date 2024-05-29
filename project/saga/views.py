@@ -28,12 +28,15 @@ def index(request):
 def results(request,factionId):   
     #Get Faction From FactionId
     faction = Faction.objects.filter(id = factionId)
+    print(faction.first)
     #If Any Factions Exist With The Given FactionId
     if faction.count() > 0:
+        print("We're digging for units")
         #If so get the units in that faction whose factionId matches the foreign key: id (factionId__id) from Faction
         unitList = Unit.objects.filter(factionId__id = factionId)
         #If antything is in the unit list
         if unitList.count() > 0:
+            print("We found units")
             #Split unit list into alphabetically ordered unit types
             heroList = Unit.objects.filter(factionId__id = factionId, unitType = "Hero").order_by("unitName")
             hearthguardList = Unit.objects.filter(factionId__id = factionId, unitType = "Hearthguard").order_by("unitName")
@@ -51,11 +54,16 @@ def results(request,factionId):
         
         #Faction Exists, Contains No Units
         else:
-            return render(request, "saga/results.html")
+            print("No units in faction")
+            context = {
+                "faction" : faction
+            }
+            return render(request, "saga/results.html", context)
     
     #Error Non Existent Faction
     else:
-        #Redirect To Home Page (Must be namespaced due to app name)
+        print("no faction found")
+        #Redirect To Home Page 
         return redirect(reverse('saga:index'))
 
 #Edit/Create Page, (Edit/Delete Exiting Faction)
@@ -108,11 +116,11 @@ def delete(request,factionId):
     if faction.count() > 0 and request.method == 'POST':
         #Delete the faction
         faction.delete()
-        #Return to create page on success (Will change to success message later)
-        return redirect(reverse("saga:create"))
+        #Return to home page on success (Will change to success message later)
+        return redirect(reverse("saga:index"))
     
-    #Return to home page on failure (Will change to failure message later)
-    return redirect(reverse("saga:index"))    
+    #Return to create page on failure (Will change to failure message later)
+    return redirect(reverse("saga:create"))    
 
 
 #Push Changes To Faction (From Edit Page)
@@ -331,12 +339,6 @@ def createPush(request):
         #To Store Units To Be Added To The Database
         newUnitsList = []
 
-        #Ensure Faction Data is not empty
-        for factionValues in ((factionName,factionDescription,factionSpecial)):
-            if factionValues.strip() == "":
-                print("One of the faction values is empty")
-                return redirect(reverse("saga:index"))
-
         #Create Faction To Push Changes Too
         faction = Faction(
             name = factionName,
@@ -346,7 +348,6 @@ def createPush(request):
    
         #Check Each Of The Rows For Valid Values
         for index in range(len(idList)):
-            id = idList[index]
             #Get Values (Validation Function Either Returns Valid Values or an Empty Dictionary)
             values = validate(
                 sagaDice = diceList[index],
@@ -379,20 +380,21 @@ def createPush(request):
                 specialRules = values["specialRules"],
                 isLegendary = values["isLegendary"],
                 factionId = faction
-            )
-                
+            )  
             newUnitsList.append(newUnit)
 
         #Save Changes Section
         #This section is only reached if no errors have occurred accessing and validating the data
+
+        #Faction must be saved before units are saved
+        faction.save()
+
+        #Save units as well
         for newUnit in newUnitsList:
             newUnit.save()
 
-        #Remember to save faction changes as well
-        faction.save()
-
         #Return to view page on success (Will change to success message later)
-        return redirect(reverse("saga:results",args=[faction.id]))
+        return redirect(reverse("saga:results",kwargs = {"factionId" : faction.id}))
 
     #Return to home page on failure (Will change to failure message later)
     return redirect(reverse("saga:index"))
