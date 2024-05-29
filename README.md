@@ -1,4 +1,4 @@
-#Saga Faction Builder Web App Project#
+# Heading 1 Saga Faction Builder Web App Project#
 
 ##Description
 This is a Django Web App that allows the user to build their own faction for the niche wargame saga
