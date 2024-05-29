@@ -30,22 +30,22 @@ Allow the user to edit a faction and its units if one is supplied
         <!--Faction Form Fields-->
         <label for = "fName">Name:</label>
         <!--autoescape to read spaces in the faction name-->
-        <input type = "text" id = "fName" value = "{% autoescape off %}{{faction.first.name}}{% endautoescape %}">
+        <input type = "text" id = "fName" name = 'fName' value = "{% autoescape off %}{{faction.first.name}}{% endautoescape %}">
         <br><br>
         <div style="display: flex; flex-direction: column;">
             <label for = "fDescription">Description:</label>
-            <textarea id = "fDescription" rows = "5", cols = "30">{{faction.first.description}}</textarea>
+            <textarea id = "fDescription" name = 'fDescription' rows = "5", cols = "30">{{faction.first.description}}</textarea>
             <br>
             <label for = "fSpecial">Special Rules:</label>
-            <textarea id = "fSpecial" rows = "5", cols = "30">{{faction.first.specialRules}}</textarea>
+            <textarea id = "fSpecial" name = 'fSpecial' rows = "5", cols = "30">{{faction.first.specialRules}}</textarea>
         </div>
 
         <br>
         <h2>Units</h2>
         <!--Submit / Delete Form -->
         <div class = "submitButtonBox">
-            <button id = "saveSubmit"   type = "submit">Save Changes</button>
-            <button id = "deleteSubmit" type="button" onclick="submitDeleteForm('{% url 'saga:delete' factionId=faction.first.id %}')">Delete Faction</button>     
+            <button id = "saveSubmit"   type="button" onclick="submitEditForm('{% url 'saga:editPush' factionId=faction.first.id%}')">Save Changes</button>
+            <button id = "deleteSubmit" type="button" onclick="submitDeleteForm('{% url 'saga:delete' factionId=faction.first.id%}')">Delete Faction</button>     
         </div>
         <!--Table Container -->
         <div style = "width: 75%; margin: 0 auto;">
@@ -56,8 +56,8 @@ Allow the user to edit a faction and its units if one is supplied
                 <button class = "addButton" type = "button" id = "addWarrior" onclick = "addUnit('Warrior')"> Add Warrior</button>
                 <button class = "addButton" type = "button" id = "addLevy" onclick = "addUnit('Levy')"> Add Levy</button>
             </div>
-            <!--Store the hidden faction id field-->
-            <input type = "hidden" id = "factionId" value = "{{faction.first.id}}">
+            <!--Store the hidden delete units field-->
+            <input type = "hidden" id = "deleteRows" name = "deleteRows">
             <!--Unit Form Fields-->
             <table id = "unitTable">
                 <tr>

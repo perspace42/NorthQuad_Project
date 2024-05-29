@@ -12,7 +12,8 @@ from django.shortcuts import render, redirect #shorten instructions
 from django.urls import reverse #enable generating urls from routes
 
 from .models import Faction, Unit
-from sagaoptions import Default, Options
+from sagaoptions import Options
+import json
 
 # Views Section
 
@@ -115,5 +116,48 @@ def delete(request,factionId):
 
 
 #Push Changes To Faction (From Edit Page)
-def push(request,factionId):
+def editPush(request, factionId):
+    #Get Faction to Push Changes To
+    faction = Faction.objects.filter(id = factionId)
+
+    #If Faction Exists and Data has been posted from a form
+    if faction.count() > 0 and request.method == "POST":
+        #Pull Data From Request (pulls by name field)
+
+        #Faction Data
+        factionName = request.POST.get('fName')
+        faction_description = request.POST.get('fDescription')
+        faction_special_rules = request.POST.get('fSpecial')
+
+        #Unit List Data (By Row)
+        idList = request.POST.getlist('unitId')
+        typeList = request.POST.getlist('unitType')
+        nameList = request.POST.getlist('unitName')
+        diceList = request.POST.getlist('sagaDice')
+        modelList = request.POST.getlist('numModels')
+        equipmentList = request.POST.getlist('equipment')
+        armourMeleeList = request.POST.getlist('armourMelee')
+        armourRangedList = request.POST.getlist('armourRanged')
+        aggMeleeList = request.POST.getlist('aggMelee')
+        aggRangedList = request.POST.getlist('aggRanged')
+        specialList = request.POST.getlist('specialRules')
+        legendaryList = request.POST.getlist('isLegendary')
+        costList = request.POST.getlist('cost')
+
+        #List of Units (By ID that are to be deleted)
+        deleteRows = (request.POST.get('deleteRows')).split(",")
+        #If there is an empty string remove it so it is empty
+        deleteRows.remove('')
+        
+        print("request/body:", request.body)
+        print("request.POST:",request.POST)
+        
+        #Return to view page on success (Will change to success message later)
+        return redirect(reverse("saga:results",args=[factionId]))
+
+    #Return to home page on failure (Will change to failure message later)
+    return redirect(reverse("saga:index"))
+
+#Push New Faction To Database (From Create Page)
+def createPush(request):
     pass

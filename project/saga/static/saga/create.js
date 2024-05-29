@@ -23,14 +23,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
     //Get the current Delete Buttons (Is not a const as new delete buttons may be added with their rows)
     deleteButtons = document.querySelectorAll('.deleteRow');
-    //Get the page form
-    const factionForm = document.getElementById("factionForm");
-    //Get the delete faction button
-    const deleteSubmit = document.getElementById("deleteSubmit");
-    //Get the save changes button
-    const saveSubmit = document.getElementById("saveSubmit");
-    //Get the faction id
-    const factionId = document.getElementById('factionId');
 
     /*
     This section is for the Delete Button on selection it will turn the table row to be deleted grey

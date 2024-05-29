@@ -1,21 +1,26 @@
 //Log if file has been accessed
 console.log("edit.js loaded successfully");
+//Track the rows to delete from the database (Global Variable)
+let deleteRows = [];
 
 //Function for deleting a faction
 function submitDeleteForm(url) {
     var form = document.getElementById('factionForm');
     form.action = url;
-    console.log("Delete Faction Button Pressed")
+    console.log("Delete Faction Button Pressed");
     form.submit();
 }
 
-//Function for saving changes to a faction
-function submitSaveForm(url){
+
+function submitEditForm(url){
     var form = document.getElementById('factionForm');
+    var deleteInputTag = document.getElementById('deleteRows');
+    //Convert Array To String
+    deleteInputTag.value = deleteRows.join(',');
     form.action = url;
-    console.log("Save Changes Button Pressed");
-    form.submit()
+    factionForm.submit();
 }
+
 
 //Function To select Table Row for deletion on submit when Button Press
 function deleteRow(event){
@@ -52,28 +57,26 @@ function deleteRow(event){
 }
 
 //After document has loaded, run the rest of the JavaScript
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener("DOMContentLoaded", function(){
     //Get Elements Section
 
     //Get the current Delete Buttons (Is not a const as new delete buttons may be added with their rows)
-    deleteButtons = document.querySelectorAll('.deleteRow');
-    //Get the page form
-    const factionForm = document.getElementById("factionForm");
-    //Get the delete faction button
-    const deleteSubmit = document.getElementById("deleteSubmit");
-    //Get the save changes button
-    const saveSubmit = document.getElementById("saveSubmit");
-    //Get the faction id
-    const factionId = document.getElementById('factionId');
+    deleteButtons = document.querySelectorAll(".deleteRow");
+
+    //Get the form
+    factionForm = document.getElementById("factionForm");
+
+    //Form submission handler
+    factionForm.addEventListener("submit", function(event) {
+        //Prevent default form submission
+        event.preventDefault();  
+    });
 
     /*
     This section is for the Delete Button on selection it will turn the table row to be deleted grey
     however it will also switch to a cancel button that can reverse the deletion operation
     a row will only be submitted / deleted after the Save Changes button has been clicked
     */
-
-    //Track the rows to delete from the database
-    let deleteRows = [];
 
     //Function To select Table Row for deletion on submit when Button Press
     function deleteRow(event){
@@ -199,8 +202,10 @@ function addRow(data){
 
     //Create The Row
     const row = document.createElement('tr');
-    
-    //Row Id (To Flag That The Row Is Newly Created)  
+    //Shade Row To Flag To User That Row Is Newly Created
+    row.style.backgroundColor = "cadetblue";
+
+    //Row Id (To Flag To System That The Row Is Newly Created)  
     const unitId = document.createElement("input");
     unitId.type = "hidden";
     unitId.name = "unitId";
