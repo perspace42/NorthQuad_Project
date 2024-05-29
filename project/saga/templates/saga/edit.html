@@ -8,7 +8,7 @@ Allow the user to create a faction and its units if none is supplied
 Allow the user to edit a faction and its units if one is supplied
 -->
 <html lang="en">
-<!--Get The CSS styling-->
+<!--Get the static folder-->
 {% load static %}
 <!--Get The CSS styling-->
 <link rel="stylesheet" href = "{%static 'saga/style.css'%}">
@@ -21,6 +21,17 @@ Allow the user to edit a faction and its units if one is supplied
 </head>
 
 <body>
+    <!--Navigation Bar-->
+    <nav>
+        <div class = "navBox">
+            <a href = "{% url 'saga:index' %}" >
+                <button> Home Page </button>
+            </a>
+            <a href = "{% url 'saga:create' %}" >
+                <button> Create Page </button>
+            </a>
+        </div>
+    </nav>
     <h1>Edit Faction</h1>
   
     <!--Form Start-->

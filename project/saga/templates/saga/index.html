@@ -4,11 +4,18 @@ Author: Scott Field
 Date: 5/24/2024
 Version: 1.0
 Purpose:
-Allow the user to select a faction to view, after which point the faction can be editted or
-deleted if the user was the original poster of that faction
+Allow the user to redirect to the:
+- faction view page
+- faction edit page
+- faction create page
 -->
 <!--index.html-->
 <html lang="en">
+
+<!--Get The staic folder-->
+{% load static %}
+<!--Get The CSS styling-->
+<link rel="stylesheet" href = "{%static 'saga/style.css'%}">
 
 <head>
     <title>Saga Faction Builder Home Page</title>
@@ -17,12 +24,20 @@ deleted if the user was the original poster of that faction
 </head>
 
 <body>
+    <!--Navigation Bar-->
+    <nav>
+        <div class = "navBox">
+            <a href = "{% url 'saga:create' %}" >
+                <button> Create Page </button>
+            </a>
+        </div>
+    </nav>
     <header>
         <h1>Saga Army Builder Home Page</h1>
     </header>
 
     <p1>Welcome to the Saga Faction Builder.
-        <br> click the <b>Create Faction</b> button to develop a new Faction to post to the website
+        <br> click the <b>Create Faction</b> button or the <b>Create Page</b> button to develop a new Faction to post to the website
         <br> click the <b>View Faction</b> button to view a Selected Faction,
         <br> click the <b>Edit Faction</b> button to edit a Selected Faction
     </p1>

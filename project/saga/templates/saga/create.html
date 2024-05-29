@@ -3,11 +3,10 @@ Author: Scott Field
 Date: 5/26/2024
 Version: 1.0
 Purpose:
-Allow the user to create a faction and its units if none is supplied
-Allow the user to edit a faction and its units if one is supplied
+Allow the user to create a faction and its units
 -->
 <html lang="en">
-<!--Get The CSS styling-->
+<!--Get the static folder-->
 {% load static %}
 <!--Get The CSS styling-->
 <link rel="stylesheet" href = "{%static 'saga/style.css'%}">
@@ -20,6 +19,14 @@ Allow the user to edit a faction and its units if one is supplied
 </head>
 
 <body>
+    <!--Navigation Bar-->
+    <nav>
+        <div class = "navBox">
+            <a href = "{% url 'saga:index' %}" >
+                <button> Home Page </button>
+            </a>
+        </div>
+    </nav>
     <!--If a Faction Has Not Been Provided, The Page Is For Creating-->
     <h1>Create Faction</h1>
     

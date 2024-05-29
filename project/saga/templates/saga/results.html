@@ -18,6 +18,17 @@ Allow the user to view a faction they have selected.
 </head>
 
 <body>
+    <!--Navigation Bar-->
+    <nav>
+      <div class = "navBox">
+          <a href = "{% url 'saga:index' %}" >
+              <button> Home Page </button>
+          </a>
+          <a href = "{% url 'saga:create' %}" >
+              <button> Create Page </button>
+          </a>
+      </div>
+    </nav>
     {% if faction %}
         <header>
             <!--In this case the first object in the QuerySet is the only object in the QuerySet-->
