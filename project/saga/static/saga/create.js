@@ -113,6 +113,9 @@ function addRow(data){
     //Create The Row
     const row = document.createElement('tr');
 
+    //Shade Row To Flag To User That Row Is Newly Created
+    row.style.backgroundColor = "cadetblue";
+
     //Row Id (To Flag To System That The Row Is Newly Created)  
     const unitId = document.createElement("input");
     unitId.type = "hidden";
