@@ -8,7 +8,7 @@ Defines the views for: Create, Read, Update, Delete, for the website
 '''
 
 
-from django.shortcuts import render, redirect #shorten instructions
+from django.shortcuts import get_object_or_404, render, redirect #shorten instructions
 from django.urls import reverse #enable generating urls from routes
 
 from .models import Faction, Unit
@@ -117,17 +117,22 @@ def delete(request,factionId):
 
 #Push Changes To Faction (From Edit Page)
 def editPush(request, factionId):
-    #Get Faction to Push Changes To
-    faction = Faction.objects.filter(id = factionId)
+    #Get Faction to Push Changes Too
+    try:
+        faction = get_object_or_404(Faction,id = factionId)
+    except:
+        #Will Change to error message later
+        print("Faction Not Found")
+        return redirect(reverse("saga:index"))
 
     #If Faction Exists and Data has been posted from a form
-    if faction.count() > 0 and request.method == "POST":
+    if request.method == "POST":
         #Pull Data From Request (pulls by name field)
 
         #Faction Data
         factionName = request.POST.get('fName')
-        faction_description = request.POST.get('fDescription')
-        faction_special_rules = request.POST.get('fSpecial')
+        factionDescription = request.POST.get('fDescription')
+        factionSpecial = request.POST.get('fSpecial')
 
         #Unit List Data (By Row)
         idList = request.POST.getlist('unitId')
@@ -144,14 +149,78 @@ def editPush(request, factionId):
         legendaryList = request.POST.getlist('isLegendary')
         costList = request.POST.getlist('cost')
 
-        #List of Units (By ID that are to be deleted)
-        deleteRows = (request.POST.get('deleteRows')).split(",")
-        #If there is an empty string remove it so it is empty
-        deleteRows.remove('')
+        #List of Units To Be Deleted (By ID that are to be deleted)
+        deleteString = request.POST.get('deleteRows')
+        if (deleteString != ""):
+            deleteRows = deleteString.split(",")
+        else:
+            deleteRows = []
+
+        #Push Changes to Faction Fields
+        faction.name = factionName
+        faction.description = factionDescription 
+        faction.specialRules = factionSpecial
+
+        #Remove unit data from units that will be deleted, from the form
+        for id in deleteRows:
+            index = idList.index(id)
+            del idList[index]
+            del typeList[index]
+            del nameList[index]
+            del diceList[index]
+            del modelList[index]
+            del equipmentList[index]
+            del armourMeleeList[index]
+            del armourRangedList[index]
+            del aggMeleeList[index]
+            del aggRangedList[index]
+            del specialList[index]
+            del legendaryList[index]
+            del costList[index]
+
+        #Delete units from database
+        for string in deleteRows:
+            idList.remove(string)
+            #Convert Data
+            deleteId = int(string)
+            #Delete From Faction
+            try:
+                unit = get_object_or_404(Unit, id = deleteId)
+                unit.delete
+            except:
+                print("Unit To Delete Not Found")
+                return redirect(reverse("saga:index"))
+            
+        #Update and Insert Other Rows
+        for index in range(len(idList)):
+            id = idList[index]
+            #Check if Inserting or Updating
+
+            #If operation is insert
+            if id == "new":
+                pass
+
+            #Otherwise operation is update   
+            else:
+                #First try to get the unit to update
+                try:
+                    unit = get_object_or_404(Unit, id)
+                except:
+                    print(f"Unit With ID: {id} not found")
+                    return redirect(reverse("saga:index"))
+                
+                #Add Validation Function Here
+                
+                #Then update the unit
+                unit.unitType = typeList[index]
+
+        #Save Changes
+        faction.save()
+
+
+        #Any unit data list besides can be used as they are all the same length
         
-        print("request/body:", request.body)
-        print("request.POST:",request.POST)
-        
+            
         #Return to view page on success (Will change to success message later)
         return redirect(reverse("saga:results",args=[factionId]))
 
