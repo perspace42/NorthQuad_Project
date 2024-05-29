@@ -6,6 +6,8 @@ Purpose:
 store the list of possible choices for every useful list of literal types in saga
 '''
 
+import json #To convert the python dictionary to json data
+
 #The available keywords for units and equipment
 #Syntax is: (DB Value, User Value)
 class Options:
@@ -42,6 +44,8 @@ class Options:
         ("-","-"),
     )
 
+#After this is Where Data Was Originally Intended to be Imported Into JavaScript, this code is currently unimplemented on the Python Side
+
 #Function to shorten creation of unit:
 def createUnit(sagaDice,cost,unitType,unitName,numModels,equipment,armourMelee,armourRanged,aggMelee,aggRanged,specialRules,isLegendary):
     return {
@@ -59,11 +63,12 @@ def createUnit(sagaDice,cost,unitType,unitName,numModels,equipment,armourMelee,a
         "isLegendary" : isLegendary
     }
 
-#The default values for a unit when creating a new faction
+#The default values for a unit when creating a new faction, and when adding a new unit to a faction
 class Default:
-    units = [
-        createUnit(1,0,"Hero","Warlord",1,"-",5,5,8,0,"-",False),
-        createUnit(1,1,"Hearthguard","Hearthguard",4,"-",5,5,2,0,"-",False),
-        createUnit(1,1,"Warrior","Warrior",8,"-",4,4,1,0,"-",False),
-        createUnit(1,1,"Levy","Levy",12,"-",4,4,1,0,"-",False)
-    ]
+    units = json.dumps({
+        "Hero" : createUnit(1,0,"Hero","Warlord",1,"-",5,5,8,0,"-",False),
+        "Hearthguard" : createUnit(1,1,"Hearthguard","Hearthguard",4,"-",5,5,2,0,"-",False),
+        "Warrior" : createUnit(1,1,"Warrior","Warrior",8,"-",4,4,1,0,"-",False),
+        "Levy" : createUnit(1,1,"Levy","Levy",12,"-",4,4,1,0,"-",False)
+    })
+    

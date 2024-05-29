@@ -51,15 +51,15 @@ Allow the user to edit a faction and its units if one is supplied
         <div style = "width: 75%; margin: 0 auto;">
             <!--Buttons To Add Units To The Table-->
             <div class = "addButtonBox">
-                <button class = "addButton" type = "button" id = "addHero"> Add Hero</button>
-                <button class = "addButton" type = "button" id = "addHearthguard"> Add Hearthguard</button>
-                <button class = "addButton" type = "button" id = "addWarrior"> Add Warrior</button>
-                <button class = "addButton" type = "button" id = "addLevy"> Add Levy</button>
+                <button class = "addButton" type = "button" id = "addHero" onclick = "addUnit('Hero')"> Add Hero</button>
+                <button class = "addButton" type = "button" id = "addHearthguard" onclick = "addUnit('Hearthguard')"> Add Hearthguard</button>
+                <button class = "addButton" type = "button" id = "addWarrior" onclick = "addUnit('Warrior')"> Add Warrior</button>
+                <button class = "addButton" type = "button" id = "addLevy" onclick = "addUnit('Levy')"> Add Levy</button>
             </div>
             <!--Store the hidden faction id field-->
             <input type = "hidden" id = "factionId" value = "{{faction.first.id}}">
             <!--Unit Form Fields-->
-            <table>
+            <table id = "unitTable">
                 <tr>
                     <th>Type</th>
                     <th>Unit</th>

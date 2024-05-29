@@ -62,9 +62,9 @@ def results(request,factionId):
 #If No Faction Supplied (Create New Faction)
 def create(request):
     context = {
-        "defaultUnits" : Default.units,
         "options" : Options
     }
+    
     return render(request,"saga/create.html", context)
 
 #If Faction Supplied (Edit Existing Faction)

@@ -44,21 +44,19 @@ Allow the user to edit a faction and its units if one is supplied
         <h2>Units</h2>
         <!--Submit / Delete Form -->
         <div class = "submitButtonBox">
-            <button id = "saveSubmit"   type = "submit">Save Changes</button>
+            <button id = "saveSubmit"   type = "submit">Create Faction</button>
         </div>
         <!--Table Container -->
         <div style = "width: 75%; margin: 0 auto;">
             <!--Buttons To Add Units To The Table-->
             <div class = "addButtonBox">
-                <button class = "addButton" type = "button" id = "addHero"> Add Hero</button>
-                <button class = "addButton" type = "button" id = "addHearthguard"> Add Hearthguard</button>
-                <button class = "addButton" type = "button" id = "addWarrior"> Add Warrior</button>
-                <button class = "addButton" type = "button" id = "addLevy"> Add Levy</button>
+                <button class = "addButton" type = "button" id = "addHero" onclick = "addUnit('Hero')"> Add Hero</button>
+                <button class = "addButton" type = "button" id = "addHearthguard" onclick = "addUnit('Hearthguard')"> Add Hearthguard</button>
+                <button class = "addButton" type = "button" id = "addWarrior" onclick = "addUnit('Warrior')"> Add Warrior</button>
+                <button class = "addButton" type = "button" id = "addLevy" onclick = "addUnit('Levy')"> Add Levy</button>
             </div>
-            <!--Store the hidden faction id field-->
-            <input type = "hidden" id = "factionId" value = "{{faction.first.id}}">
             <!--Unit Form Fields-->
-            <table>
+            <table id = "unitTable">
                 <tr>
                     <th>Type</th>
                     <th>Unit</th>
@@ -73,44 +71,7 @@ Allow the user to edit a faction and its units if one is supplied
                     <th>Legendary?</th>
                     <th>Cost</th>
                 </tr>
-                <!--Populate Table Data-->
-                <!--Get the QuerySet containing the units -->
-                {% for collection in unitSet %}
-                    <!-- Get the unit from the QuerySet -->
-                    {% for unit in collection %}
-                        <tr>
-                            <!--Store the hidden unit id field-->
-                            <input type = "hidden" name="unitId" value="{{unit.id}}">
-                            <td>
-                                <select name = "unitType">
-                                    {% for tuple in options.unitOptions %}
-                                        <option value = "{{ tuple.0 }}" {%if tuple.1 == unit.unitType %} selected {%endif%}>{{tuple.1}}</option>     
-                                    {% endfor %}
-                                </select>
-                            </td>
-                            <!--autoescape to read spaces in the unit name-->
-                            <td><input type = "text" name = "unitName"  value = "{% autoescape off %}{{unit.unitName}}{% endautoescape %}"></td>
-                            <td><input type = "number" name = "sagaDice" class = "shrinkInput" min = "0"  value = {{unit.sagaDice}}></td>
-                            <td><input type = "number" name = "numModels" class = "shrinkInput" min = "0"  value = {{unit.numModels}}></td>
-                            <td>
-                                <select name = "equipment">
-                                    {% for tuple in options.equipmentOptions %}
-                                        <option value = "{{ tuple.0 }}" {%if tuple.1 == unit.equipment %} selected {%endif%}>{{tuple.1}}</option> 
-                                    {% endfor %}
-                                </select>
-                            </td>
-                            <td><input type = "number" name = "armourMelee" class = "shrinkInput" min = "0" value = {{unit.armourMelee}}></td>
-                            <td><input type = "number" name = "armourRanged" class = "shrinkInput" min = "0" value = {{unit.armourRanged}}></td>
-                            <td><input type = "number" name = "aggMelee" class = "shrinkInput" min = "0" step = "0.01" value = {{unit.aggMelee}}></td>
-                            <td><input type = "number" name = "aggRanged" class = "shrinkInput" min = "0" step = "0.01" value = {{unit.aggRanged}}></td>
-                            <td><textarea name = "specialRules">{{ unit.specialRules }}</textarea></td>
-                            <td><input type = "checkbox" name = "isLegendary" {%if unit.isLegendary %} checked {% endif %}></td>
-                            <td><input type = "number" name = "cost" class = "shrinkInput" value = {{unit.cost}}></td>
-                            <!--Delete Button-->
-                            <td><button class = "deleteRow" type = "button">Delete</button></td>
-                        </tr>
-                    {% endfor %}   
-                {% endfor %}
+                <!--Population of Table Data is solely handled by JavaScript-->
             </table>
         </div>
     </form>
