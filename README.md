@@ -1,10 +1,10 @@
-# Heading 1 Saga Faction Builder Web App Project#
+# Saga Faction Builder Web App Project
 
-##Description
+## Description
 This is a Django Web App that allows the user to build their own faction for the niche wargame saga
 created by [studio tomahawk] (https://www.studio-tomahawk.com/en/saga/)
 
-##How To Install (Dependencies)
+## How To Install (Dependencies)
 1: Install Python 3.12.3 from: https://www.python.org/downloads/
    be sure to add Python to your systems PATH variable during the installation
 
@@ -12,7 +12,7 @@ created by [studio tomahawk] (https://www.studio-tomahawk.com/en/saga/)
 
 3: Clone this repository into the folder of your choice.
 
-##How to Run
+## How to Run
 1: Either open the repository folder in an Integrated Developer Environment or Navigate to it Using The Command Prompt
 
 2: Change directory to the project folder (Either in your IDE terminal or using the Command Prompt)
@@ -32,4 +32,7 @@ your url is located after the text: "Starting development server at "
 5: Access Running Application
 open a web browser of your choice and navigate to url/saga
 example: http://127.0.0.1:8000/saga
+
+## Operating The Application
+The ### Saga Faction Builder ### home page
 
