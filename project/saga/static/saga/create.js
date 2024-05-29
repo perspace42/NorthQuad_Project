@@ -19,24 +19,11 @@ function deleteRow(event){
 
 //After document has loaded, run the rest of the JavaScript
 document.addEventListener('DOMContentLoaded', function(){
-    //Get Elements Section
-
-    //Get the current Delete Buttons (Is not a const as new delete buttons may be added with their rows)
-    deleteButtons = document.querySelectorAll('.deleteRow');
-
-    /*
-    This section is for the Delete Button on selection it will turn the table row to be deleted grey
-    however it will also switch to a cancel button that can reverse the deletion operation
-    a row will only be submitted / deleted after the Save Changes button has been clicked
-    */
-
-    //Get All Of The Delete Buttons (Is not a const as new delete buttons may be added / removed as new rows are added / removed)
-    deleteButtons = document.querySelectorAll('.deleteRow');
-
-    //Add The deleteRow event listener to each of the buttons
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', deleteRow);
-    });
+    //Add Units to Empty Faction On Load
+    addUnit("Hero");
+    addUnit("Hearthguard");
+    addUnit("Warrior");
+    addUnit("Levy");
 });
 
 
