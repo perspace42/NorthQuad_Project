@@ -67,3 +67,7 @@ then you followed the listed rules and your data has been added tothe database.
 - Otherwise if you are redirected to the home page after pressing Push Changes, you broke
 one of the listed rules, or edited the post data so that it failed internal validation.
 
+### How To Know If Delete Faction Was Successful
+- If you are redirected to the Home Page after pressing Delete Faction, the faction has been successfully deleted
+- If you are redirected to the Create Page after pressing Delete Faction, the faction you requested to delete already does not exist in the database 
+
