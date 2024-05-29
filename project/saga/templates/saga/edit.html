@@ -105,7 +105,12 @@ Allow the user to edit a faction and its units if one is supplied
                             <td><input type = "number" name = "aggMelee" class = "shrinkInput" min = "0" step = "0.01" value = {{unit.aggMelee}}></td>
                             <td><input type = "number" name = "aggRanged" class = "shrinkInput" min = "0" step = "0.01" value = {{unit.aggRanged}}></td>
                             <td><textarea name = "specialRules">{{ unit.specialRules }}</textarea></td>
-                            <td><input type = "checkbox" name = "isLegendary" {%if unit.isLegendary %} checked {% endif %}></td>
+                            <td>
+                                <select name ="isLegendary">
+                                    <option value = "True"  {% if unit.isLegendary  %} selected {% endif %}>True</option>
+                                    <option value = "False" {% if not unit.isLegendary %} selected {% endif %}>False</option>
+                                </select>
+                            </td>
                             <td><input type = "number" name = "cost" class = "shrinkInput" value = {{unit.cost}}></td>
                             <!--Delete Button-->
                             <td><button class = "deleteRow" type = "button">Delete</button></td>

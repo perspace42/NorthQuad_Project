@@ -249,10 +249,18 @@ function addRow(data){
 
     //Legendary Checkbox
     const isLegendaryCell = document.createElement('td');
-    const isLegendary = document.createElement('input');
-    isLegendary.type = 'checkbox';
-    isLegendary.name = 'isLegendary';
-    isLegendary.checked = data["isLegendary"];
+    const isLegendary = document.createElement('select');
+    isLegendary.name = "isLegendary"
+
+    trueOption = document.createElement('option');
+    trueOption.value = "True";
+
+    falseOption = document.createElement('option');
+    falseOption.value = "False";
+    falseOption.selected = true;
+    
+    isLegendary.appendChild(trueOption)
+    isLegendary.appendChild(falseOption)
     isLegendaryCell.appendChild(isLegendary);
     row.appendChild(isLegendaryCell);
 

@@ -13,7 +13,7 @@ from django.urls import reverse #enable generating urls from routes
 
 from .models import Faction, Unit
 from sagaoptions import Options
-import json
+from validation import validate
 
 # Views Section
 
@@ -149,6 +149,15 @@ def editPush(request, factionId):
         legendaryList = request.POST.getlist('isLegendary')
         costList = request.POST.getlist('cost')
 
+        #Note operations will only be executed if no errors occur
+
+        #To Store Units To Be Added To The Database
+        newUnitsList = []
+        #To Store Units To Be Edited In The Database
+        updateUnitsList = []
+        #To Store Units To Be Deleted From The Database
+        deleteUnitsList = []
+
         #List of Units To Be Deleted (By ID that are to be deleted)
         deleteString = request.POST.get('deleteRows')
         if (deleteString != ""):
@@ -156,7 +165,13 @@ def editPush(request, factionId):
         else:
             deleteRows = []
 
-        #Push Changes to Faction Fields
+        #Ensure Faction Data is not empty
+        for factionValues in ((factionName,factionDescription,factionSpecial)):
+            if factionValues.strip() == "":
+                print("One of the faction values is empty")
+                return redirect(reverse("saga:index"))
+
+        #Add Changes to Faction Fields
         faction.name = factionName
         faction.description = factionDescription 
         faction.specialRules = factionSpecial
@@ -180,47 +195,104 @@ def editPush(request, factionId):
 
         #Delete units from database
         for string in deleteRows:
-            idList.remove(string)
             #Convert Data
             deleteId = int(string)
             #Delete From Faction
             try:
                 unit = get_object_or_404(Unit, id = deleteId)
-                unit.delete
+                #Add unit to the deletion list
+                deleteUnitsList.append(unit)
             except:
                 print("Unit To Delete Not Found")
+                #This does not redirect as trying to delete a unit that isn't present, indicates it has already been deleted
                 return redirect(reverse("saga:index"))
             
-        #Update and Insert Other Rows
+        #Update and Insert Each Other Rows
         for index in range(len(idList)):
             id = idList[index]
-            #Check if Inserting or Updating
-
-            #If operation is insert
+            #Get Values (Validation Function Either Returns Valid Values or an Empty Dictionary)
+            values = validate(
+                sagaDice = diceList[index],
+                cost = costList[index],
+                unitType = typeList[index],
+                unitName = nameList[index],
+                numModels = modelList[index],
+                equipment = equipmentList[index],
+                armourMelee = armourMeleeList[index],
+                armourRanged = armourRangedList[index],
+                aggMelee = aggMeleeList[index],
+                aggRanged = aggRangedList[index],
+                specialRules = specialList[index],
+                isLegendary = legendaryList[index],
+            )
+                
+            #INSERT OPERATION
             if id == "new":
-                pass
+                #Create the new unit
+                newUnit = Unit(
+                    sagaDice = values["sagaDice"],
+                    cost = values["cost"],
+                    unitType = values["unitType"],
+                    unitName = values["unitName"],
+                    numModels = values["numModels"],
+                    equipment = values["equipment"],
+                    armourMelee = values["armourMelee"],
+                    armourRanged = values["armourRanged"],
+                    aggMelee = values["aggMelee"],
+                    aggRanged = values["aggRanged"],
+                    specialRules = values["specialRules"],
+                    isLegendary = values["isLegendary"],
+                    factionId = faction
+                )
+                #Add unit to the add list
+                newUnitsList.append(newUnit)
 
-            #Otherwise operation is update   
+            #UPDATE OPERATION 
             else:
-                #First try to get the unit to update
+                #First try to get the unit that will be updated
                 try:
-                    unit = get_object_or_404(Unit, id)
+                    unitId = int(id)
+                    unit = get_object_or_404(Unit, id = unitId)
                 except:
                     print(f"Unit With ID: {id} not found")
                     return redirect(reverse("saga:index"))
                 
-                #Add Validation Function Here
-                
-                #Then update the unit
-                unit.unitType = typeList[index]
+                #Then update the unit if the values are correct
+                if values:
+                    unit.sagaDice = values["sagaDice"]
+                    unit.cost = values["cost"]
+                    unit.unitType = values["unitType"]
+                    unit.unitName = values["unitName"]
+                    unit.numModels = values["numModels"]
+                    unit.equipment = values["equipment"]
+                    unit.armourMelee = values["armourMelee"]
+                    unit.armourRanged = values["armourRanged"]
+                    unit.aggMelee = values["aggMelee"]
+                    unit.aggRanged = values["aggRanged"]
+                    unit.specialRules = values["specialRules"]
+                    unit.isLegendary = values["isLegendary"]
 
-        #Save Changes
+                    #Then save changes
+                    updateUnitsList.append(unit)
+                #If no valid values provided, redirect
+                else:
+                    return redirect(reverse("saga:index"))
+
+
+        #Save Changes Section
+        #This section is only reached if no errors have occurred accessing and validating the data
+        for deleteUnit in deleteUnitsList:
+            deleteUnit.delete()
+
+        for updateUnit in updateUnitsList:
+            updateUnit.save()
+
+        for newUnit in newUnitsList:
+            newUnit.save()
+
+        #Remember to save faction changes as well
         faction.save()
 
-
-        #Any unit data list besides can be used as they are all the same length
-        
-            
         #Return to view page on success (Will change to success message later)
         return redirect(reverse("saga:results",args=[factionId]))
 
@@ -229,4 +301,98 @@ def editPush(request, factionId):
 
 #Push New Faction To Database (From Create Page)
 def createPush(request):
-    pass
+
+    #If Faction Exists and Data has been posted from a form
+    if request.method == "POST":
+        #Pull Data From Request (pulls by name field)
+
+        #Faction Data
+        factionName = request.POST.get('fName')
+        factionDescription = request.POST.get('fDescription')
+        factionSpecial = request.POST.get('fSpecial')
+
+        #Unit List Data (By Row)
+        idList = request.POST.getlist('unitId')
+        typeList = request.POST.getlist('unitType')
+        nameList = request.POST.getlist('unitName')
+        diceList = request.POST.getlist('sagaDice')
+        modelList = request.POST.getlist('numModels')
+        equipmentList = request.POST.getlist('equipment')
+        armourMeleeList = request.POST.getlist('armourMelee')
+        armourRangedList = request.POST.getlist('armourRanged')
+        aggMeleeList = request.POST.getlist('aggMelee')
+        aggRangedList = request.POST.getlist('aggRanged')
+        specialList = request.POST.getlist('specialRules')
+        legendaryList = request.POST.getlist('isLegendary')
+        costList = request.POST.getlist('cost')
+
+        #Note operations will only be executed if no errors occur
+
+        #To Store Units To Be Added To The Database
+        newUnitsList = []
+
+        #Ensure Faction Data is not empty
+        for factionValues in ((factionName,factionDescription,factionSpecial)):
+            if factionValues.strip() == "":
+                print("One of the faction values is empty")
+                return redirect(reverse("saga:index"))
+
+        #Create Faction To Push Changes Too
+        faction = Faction(
+            name = factionName,
+            description = factionDescription,
+            specialRules = factionSpecial
+        )
+   
+        #Check Each Of The Rows For Valid Values
+        for index in range(len(idList)):
+            id = idList[index]
+            #Get Values (Validation Function Either Returns Valid Values or an Empty Dictionary)
+            values = validate(
+                sagaDice = diceList[index],
+                cost = costList[index],
+                unitType = typeList[index],
+                unitName = nameList[index],
+                numModels = modelList[index],
+                equipment = equipmentList[index],
+                armourMelee = armourMeleeList[index],
+                armourRanged = armourRangedList[index],
+                aggMelee = aggMeleeList[index],
+                aggRanged = aggRangedList[index],
+                specialRules = specialList[index],
+                isLegendary = legendaryList[index],
+            )
+                
+            #Insert Operation
+            #Create the new unit
+            newUnit = Unit(
+                sagaDice = values["sagaDice"],
+                cost = values["cost"],
+                unitType = values["unitType"],
+                unitName = values["unitName"],
+                numModels = values["numModels"],
+                equipment = values["equipment"],
+                armourMelee = values["armourMelee"],
+                armourRanged = values["armourRanged"],
+                aggMelee = values["aggMelee"],
+                aggRanged = values["aggRanged"],
+                specialRules = values["specialRules"],
+                isLegendary = values["isLegendary"],
+                factionId = faction
+            )
+                
+            newUnitsList.append(newUnit)
+
+        #Save Changes Section
+        #This section is only reached if no errors have occurred accessing and validating the data
+        for newUnit in newUnitsList:
+            newUnit.save()
+
+        #Remember to save faction changes as well
+        faction.save()
+
+        #Return to view page on success (Will change to success message later)
+        return redirect(reverse("saga:results",args=[faction.id]))
+
+    #Return to home page on failure (Will change to failure message later)
+    return redirect(reverse("saga:index"))
