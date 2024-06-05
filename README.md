@@ -19,7 +19,7 @@ created by [studio tomahawk] (https://www.studio-tomahawk.com/en/saga/)
 
 3: Execute this command: python manage.py runserver 
 
-4: The server will not output the following stack trace (or similar):
+4: The server will output the following stack trace (or similar):
   System check identified no issues (0 silenced).
   (Todays Date) - (Todays Time)
   Django version 5.0.6, using settings 'sagabuilder.settings'
