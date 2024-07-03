@@ -81,44 +81,11 @@ function addUnit(type){
 
 //Add a row to the table using JavaScript
 function addRow(data){
-    //Define Literals To Store Data That Was Difficult To Import (In version 2.0 this will be pulled from session storage)
-
     //Available types of units 
-    unitOptions = [
-        ["Hero", "Hero"],
-        ["Hearthguard", "Hearthguard"],
-        ["Warrior", "Warrior"],
-        ["Levy", "Levy"]
-    ];
+    const unitOptions = sagaOptions.Options.unitOptions;
 
     //Available types of equipment
-    const equipmentOptions = [
-        // General Equipment Section
-        ["Bows", "Bows"],
-        ["Bows and Slings", "Bows and Slings"],
-        ["Composite Bows", "Composite Bows"],
-        ["Crossbows", "Crossbows"],
-        ["Heavy Weapons", "Heavy Weapons"],
-        ["Improvised Projectiles", "Improvised Projectiles"],
-        ["Javelins", "Javelins"],
-        ["Sarissa", "Sarissa"],
-        ["Slings", "Slings"],
-        ["Unarmed", "Unarmed"],
-      
-        // Horse + Equipment Section
-        ["Horse", "Horse"],
-        ["Horse, Cataphract", "Horse, Cataphract"],
-        ["Horse, Composite Bows", "Horse, Composite Bows"],
-        ["Horse, Javelins", "Horse, Javelins"],
-      
-        // Camel + Equipment Section
-        ["Camel, Composite Bows", "Camel, Composite Bows"],
-        ["Camel, Javelins", "Camel, Javelins"],
-      
-        // Represents No Special Equipment
-        ["-", "-"]
-      ];
-
+    const equipmentOptions = sagaOptions.Options.equipmentOptions;
 
     //Get The Table
     const table = document.getElementById('unitTable');
