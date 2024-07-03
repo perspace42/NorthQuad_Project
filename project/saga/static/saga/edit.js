@@ -141,6 +141,7 @@ function createUnit(sagaDice, cost, unitType, unitName, numModels, equipment, ar
 
 //Get The Unit Stats to Add To The Row Depending on the button clicked
 function addUnit(type){
+    var data;
     if (type === "Hero"){
         data = createUnit(1,0,"Hero","Warlord",1,"-",5,5,8,0,"-",false)   
     }else if (type === "Hearthguard"){

@@ -1,0 +1,150 @@
+{
+    "Options": {
+        "unitOptions": [
+            [
+                "Hero",
+                "Hero"
+            ],
+            [
+                "Hearthguard",
+                "Hearthguard"
+            ],
+            [
+                "Warrior",
+                "Warrior"
+            ],
+            [
+                "Levy",
+                "Levy"
+            ]
+        ],
+        "equipmentOptions": [
+            [
+                "Bows",
+                "Bows"
+            ],
+            [
+                "Bows and Slings",
+                "Bows and Slings"
+            ],
+            [
+                "Composite Bows",
+                "Composite Bows"
+            ],
+            [
+                "Crossbows",
+                "Crossbows"
+            ],
+            [
+                "Heavy Weapons",
+                "Heavy Weapons"
+            ],
+            [
+                "Improvised Projectiles",
+                "Improvised Projectiles"
+            ],
+            [
+                "Javelins",
+                "Javelins"
+            ],
+            [
+                "Sarissa",
+                "Sarissa"
+            ],
+            [
+                "Slings",
+                "Slings"
+            ],
+            [
+                "Unarmed",
+                "Unarmed"
+            ],
+            [
+                "Horse",
+                "Horse"
+            ],
+            [
+                "Horse, Cataphract",
+                "Horse, Cataphract"
+            ],
+            [
+                "Horse, Composite Bows",
+                "Horse, Composite Bows"
+            ],
+            [
+                "Horse, Javelins",
+                "Horse, Javelins"
+            ],
+            [
+                "Camel, Composite Bows",
+                "Camel, Composite Bows"
+            ],
+            [
+                "Camel, Javelins",
+                "Camel, Javelins"
+            ],
+            [
+                "-",
+                "-"
+            ]
+        ]
+    },
+    "Default": {
+        "Hero": {
+            "sagaDice": 1,
+            "cost ": 0,
+            "unitType": "Hero",
+            "unitName": "Warlord",
+            "numModels": 1,
+            "equipment": "-",
+            "armourMelee": 5,
+            "armourRanged": 5,
+            "aggMelee": 8,
+            "aggRanged": 0,
+            "specialRules": "-",
+            "isLegendary": false
+        },
+        "Hearthguard": {
+            "sagaDice": 1,
+            "cost ": 1,
+            "unitType": "Hearthguard",
+            "unitName": "Hearthguard",
+            "numModels": 4,
+            "equipment": "-",
+            "armourMelee": 5,
+            "armourRanged": 5,
+            "aggMelee": 2,
+            "aggRanged": 0,
+            "specialRules": "-",
+            "isLegendary": false
+        },
+        "Warrior": {
+            "sagaDice": 1,
+            "cost ": 1,
+            "unitType": "Warrior",
+            "unitName": "Warrior",
+            "numModels": 8,
+            "equipment": "-",
+            "armourMelee": 4,
+            "armourRanged": 4,
+            "aggMelee": 1,
+            "aggRanged": 0,
+            "specialRules": "-",
+            "isLegendary": false
+        },
+        "Levy": {
+            "sagaDice": 1,
+            "cost ": 1,
+            "unitType": "Levy",
+            "unitName": "Levy",
+            "numModels": 12,
+            "equipment": "-",
+            "armourMelee": 4,
+            "armourRanged": 4,
+            "aggMelee": 1,
+            "aggRanged": 0,
+            "specialRules": "-",
+            "isLegendary": false
+        }
+    }
+}

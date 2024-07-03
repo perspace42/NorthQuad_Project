@@ -65,10 +65,23 @@ def createUnit(sagaDice,cost,unitType,unitName,numModels,equipment,armourMelee,a
 
 #The default values for a unit when creating a new faction, and when adding a new unit to a faction
 class Default:
-    units = json.dumps({
-        "Hero" : createUnit(1,0,"Hero","Warlord",1,"-",5,5,8,0,"-",False),
+    units = {
+        "Hero" : createUnit(sagaDice = 1, cost = 0, unitType = "Hero",unitName = "Warlord", numModels = 1, equipment = "-", armourMelee = 5, armourRanged = 5, aggMelee = 8, aggRanged = 0, specialRules = "-", isLegendary = False),
         "Hearthguard" : createUnit(1,1,"Hearthguard","Hearthguard",4,"-",5,5,2,0,"-",False),
         "Warrior" : createUnit(1,1,"Warrior","Warrior",8,"-",4,4,1,0,"-",False),
         "Levy" : createUnit(1,1,"Levy","Levy",12,"-",4,4,1,0,"-",False)
-    })
+    }
+
+#Wrap Data To Be Parsed To JSON
+data = {
+    "Options" : {
+        "unitOptions": Options.unitOptions, 
+        "equipmentOptions" : Options.equipmentOptions
+    },
+    "Default" : Default.units
+}
+
+#Attempt To Write The Data To A JSON file that will be used to send the data to the JavaScript File
+with open("saga/static/saga/sagaoptions.json", "w") as jFile:
+    json.dump(data, jFile, indent=4)
     

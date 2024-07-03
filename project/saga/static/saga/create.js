@@ -1,6 +1,26 @@
 //Log if file has been accessed
 console.log("create.js loaded successfully");
 
+
+function getSagaOptions(){
+    var scriptTag = document.currentScript;
+    var optionsFileUrl = scriptTag.dataset.optionsFile;
+
+    //Use the optionsFileUrl to fetch the contents of sagaoptions.json
+    fetch(optionsFileUrl)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        return data
+    })
+    .catch(error => {
+        console.error('Error fetching sagaoptions.json:', error);
+        return
+    });
+}
+
+const sagaOptions = getSagaOptions();
+
 //Function for Saving Faction to database
 function submitSaveForm(url){
     var form = document.getElementById('factionForm');
@@ -51,6 +71,7 @@ function createUnit(sagaDice, cost, unitType, unitName, numModels, equipment, ar
 
 //Get The Unit Stats to Add To The Row Depending on the button clicked
 function addUnit(type){
+    var data;
     if (type === "Hero"){
         data = createUnit(1,0,"Hero","Warlord",1,"-",5,5,8,0,"-",false)   
     }else if (type === "Hearthguard"){
