@@ -1,5 +1,6 @@
 //Log if file has been accessed
 console.log("create.js loaded successfully");
+//global variable that will store the data in the from the sagaoptoins.json file
 let sagaOptions;
 
 //Function to get the JSON file
