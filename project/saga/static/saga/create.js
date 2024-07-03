@@ -1,25 +1,33 @@
 //Log if file has been accessed
 console.log("create.js loaded successfully");
+let sagaOptions;
 
-
-function getSagaOptions(){
+//Function to get the JSON file
+async function getSagaOptions() {
+    /*
     var scriptTag = document.currentScript;
     var optionsFileUrl = scriptTag.dataset.optionsFile;
+    */
+    var scriptTag = document.querySelector('script[src*="create.js"]');
+    var optionsFileUrl = new URL('sagaoptions.json', scriptTag.src).href;
 
-    //Use the optionsFileUrl to fetch the contents of sagaoptions.json
-    fetch(optionsFileUrl)
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        return data
-    })
-    .catch(error => {
+    try {
+        const response = await fetch(optionsFileUrl);
+        const data = await response.json();
+        return data;
+    } catch (error) {
         console.error('Error fetching sagaoptions.json:', error);
-        return
-    });
+        return null;
+    }
 }
 
-const sagaOptions = getSagaOptions();
+//Function to assign the JSON file to the variable
+async function assignSagaOptions() {
+    sagaOptions = await getSagaOptions();
+    console.log("sagaOptions: ",sagaOptions);
+}
+
+
 
 //Function for Saving Faction to database
 function submitSaveForm(url){
@@ -38,7 +46,9 @@ function deleteRow(event){
 }
 
 //After document has loaded, run the rest of the JavaScript
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', async function(){
+    //Wait to load the necessary data
+    await assignSagaOptions();
     //Add Units to Empty Faction On Load
     addUnit("Hero");
     addUnit("Hearthguard");
@@ -50,38 +60,19 @@ document.addEventListener('DOMContentLoaded', function(){
 /*
 This is the section for dynamically adding new Units to the rows to then add to the table
 */
-
-//Speed up default unit creation
-function createUnit(sagaDice, cost, unitType, unitName, numModels, equipment, armourMelee, armourRanged, aggMelee, aggRanged, specialRules, isLegendary) {
-    return {
-      sagaDice: sagaDice,
-      cost: cost,
-      unitType: unitType,
-      unitName: unitName,
-      numModels: numModels,
-      equipment: equipment,
-      armourMelee: armourMelee,
-      armourRanged: armourRanged,
-      aggMelee: aggMelee,
-      aggRanged: aggRanged,
-      specialRules: specialRules,
-      isLegendary: isLegendary
-    };
-}
-
 //Get The Unit Stats to Add To The Row Depending on the button clicked
 function addUnit(type){
     var data;
     if (type === "Hero"){
-        data = createUnit(1,0,"Hero","Warlord",1,"-",5,5,8,0,"-",false)   
+        data = sagaOptions.Default.Hero;
     }else if (type === "Hearthguard"){
-        data = createUnit(1,1,"Hearthguard","Hearthguard",4,"-",5,5,2,0,"-",false)
+        data = sagaOptions.Default.Hearthguard;
     }else if (type === "Warrior"){
-        data = createUnit(1,1,"Warrior","Warrior",8,"-",4,4,1,0,"-",false)
+        data = sagaOptions.Default.Warrior;
     }else if (type === "Levy"){
-        data = createUnit(1,1,"Levy","Levy",12,"-",4,4,1,0,"-",false)
+        data = sagaOptions.Default.Levy;
     }else{
-        console.log("Invalid Argument Passed By The Button")
+        console.log("Invalid Argument: ",type," passed by addUnit")
         return;
     }
     addRow(data);
@@ -92,7 +83,7 @@ function addRow(data){
     //Define Literals To Store Data That Was Difficult To Import (In version 2.0 this will be pulled from session storage)
 
     //Available types of units 
-    const unitOptions = [
+    unitOptions = [
         ["Hero", "Hero"],
         ["Hearthguard", "Hearthguard"],
         ["Warrior", "Warrior"],
@@ -272,11 +263,18 @@ function addRow(data){
 
     trueOption = document.createElement('option');
     trueOption.value = "True";
+    trueOption.textContent = "True";
 
     falseOption = document.createElement('option');
     falseOption.value = "False";
-    falseOption.selected = true;
-    
+    falseOption.textContent = "False"
+
+    if(!data.isLegendary){
+        falseOption.selected = true;
+    }else{
+        trueOption.selected = true;
+    }
+
     isLegendary.appendChild(trueOption)
     isLegendary.appendChild(falseOption)
     isLegendaryCell.appendChild(isLegendary);
@@ -288,7 +286,7 @@ function addRow(data){
     cost.type = 'number';
     cost.name = 'cost';
     cost.className = 'shrinkInput';
-    cost.value = data["cost"];
+    cost.value = data['cost'];
     costCell.appendChild(cost);
     row.appendChild(costCell);
 

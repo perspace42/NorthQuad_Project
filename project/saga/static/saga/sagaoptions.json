@@ -92,7 +92,7 @@
     "Default": {
         "Hero": {
             "sagaDice": 1,
-            "cost ": 0,
+            "cost": 0,
             "unitType": "Hero",
             "unitName": "Warlord",
             "numModels": 1,
@@ -106,7 +106,7 @@
         },
         "Hearthguard": {
             "sagaDice": 1,
-            "cost ": 1,
+            "cost": 1,
             "unitType": "Hearthguard",
             "unitName": "Hearthguard",
             "numModels": 4,
@@ -120,7 +120,7 @@
         },
         "Warrior": {
             "sagaDice": 1,
-            "cost ": 1,
+            "cost": 1,
             "unitType": "Warrior",
             "unitName": "Warrior",
             "numModels": 8,
@@ -134,7 +134,7 @@
         },
         "Levy": {
             "sagaDice": 1,
-            "cost ": 1,
+            "cost": 1,
             "unitType": "Levy",
             "unitName": "Levy",
             "numModels": 12,

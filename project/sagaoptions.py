@@ -50,7 +50,7 @@ class Options:
 def createUnit(sagaDice,cost,unitType,unitName,numModels,equipment,armourMelee,armourRanged,aggMelee,aggRanged,specialRules,isLegendary):
     return {
         "sagaDice" : sagaDice,
-        "cost " : cost,
+        "cost" : cost,
         "unitType" : unitType,
         "unitName" : unitName,
         "numModels" : numModels,
