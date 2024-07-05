@@ -1,36 +1,49 @@
-//Log if file has been accessed
-console.log("edit.js loaded successfully");
-//Track the rows to delete from the database (Global Variable)
-let deleteRows = [];
+//Global Variable to Store JSON
+export let sagaOptions;
+export let deleteRows;
 
-//Function for deleting a faction
-function submitDeleteForm(url) {
-    var form = document.getElementById('factionForm');
-    form.action = url;
-    console.log("Delete Faction Button Pressed");
-    form.submit();
+//Function to get the JSON file in the same directory as the given script
+export async function getSagaOptions(scriptName, jsonPath) {
+    /*
+    var scriptTag = document.currentScript;
+    var optionsFileUrl = scriptTag.dataset.optionsFile;
+    */
+    var scriptTag = document.querySelector(`script[src*="${scriptName}"]`);
+    var optionsFileUrl = new URL(jsonPath, scriptTag.src).href;
+
+    try {
+        const response = await fetch(optionsFileUrl);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching sagaoptions.json:', error);
+        return null;
+    }
 }
 
-//Function for editing a faction
-function submitEditForm(url){
-    var form = document.getElementById('factionForm');
-    var deleteInputTag = document.getElementById('deleteRows');
-    //Convert Array To String
-    deleteInputTag.value = deleteRows.join(',');
-    form.action = url;
-    form.submit();
+//Function to assign the JSON file to the variable
+export async function assignSagaOptions(scriptName, jsonPath) {
+    sagaOptions = await getSagaOptions(scriptName, jsonPath);
+    console.log("sagaOptions: ",sagaOptions);
 }
 
+//Function for Saving Faction to database
+export function submitSaveForm(url){
+    var form = document.getElementById('factionForm');
+    form.action = url;
+    console.log("Save Faction Button Pressed");
+    form.submit()
+}
 
 //Function To select Table Row for deletion on submit when Button Press
-function deleteRow(event){
+export function deleteRow(event){
     //Find the closest row
-    row = event.target.closest('tr');
+    var row = event.target.closest('tr');
     //Find the database Id of the Unit represented by that row
-    inputTag = row.querySelector("input[name='unitId']");
-    id = inputTag.value;
+    var inputTag = row.querySelector("input[name='unitId']");
+    var id = inputTag.value;
     //Get the specific delete button that was clicked
-    deleteButton = event.target;
+    var deleteButton = event.target;
 
     //First check if the row is a new row (id === "new")
     if (id === "new"){
@@ -56,153 +69,24 @@ function deleteRow(event){
     console.log("Delete Rows:", deleteRows)
 }
 
-//After document has loaded, run the rest of the JavaScript
-document.addEventListener("DOMContentLoaded", function(){
-    //Get Elements Section
-
-    //Get the current Delete Buttons (Is not a const as new delete buttons may be added with their rows)
-    deleteButtons = document.querySelectorAll(".deleteRow");
-
-    //Get the form
-    factionForm = document.getElementById("factionForm");
-
-    //Form submission handler
-    factionForm.addEventListener("submit", function(event) {
-        //Prevent default form submission
-        event.preventDefault();  
-    });
-
-    /*
-    This section is for the Delete Button on selection it will turn the table row to be deleted grey
-    however it will also switch to a cancel button that can reverse the deletion operation
-    a row will only be submitted / deleted after the Save Changes button has been clicked
-    */
-
-    //Function To select Table Row for deletion on submit when Button Press
-    function deleteRow(event){
-        //Find the closest row
-        row = event.target.closest('tr');
-        //Find the database Id of the Unit represented by that row
-        inputTag = row.querySelector("input[name='unitId']");
-        id = inputTag.value;
-        //Get the specific delete button that was clicked
-        deleteButton = event.target;
-
-        // Check if the row is already grayed out
-        if (deleteRows.includes(id)){
-            // If grayed out, revert the row to its original color
-            row.style.backgroundColor = '';
-            deleteButton.textContent = 'Delete';
-            deleteButton.style.color = 'red';
-            // Remove the row from the deleteRows array
-            deleteRows.splice(deleteRows.indexOf(id), 1); 
-        }else{
-            // If not grayed out, gray out the row
-            row.style.backgroundColor = 'grey';
-            deleteButton.textContent = 'Cancel';
-            deleteButton.style.color = 'black';
-             // Add the row to the greyedOutRows array
-            deleteRows.push(id);
-        }
-        //Push to the console which rows are to be deleted
-        console.log("Delete Rows:", deleteRows)
-    }
-
-    //Get All Of The Delete Buttons (Is not a const as new delete buttons may be added / removed as new rows are added / removed)
-    deleteButtons = document.querySelectorAll('.deleteRow');
-
-    //Add The deleteRow event listener to each of the buttons
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', deleteRow);
-    });
-});
-
 /*
 This is the section for dynamically adding new Units to the rows to then add to the table
 */
 
-//Speed up default unit creation
-function createUnit(sagaDice, cost, unitType, unitName, numModels, equipment, armourMelee, armourRanged, aggMelee, aggRanged, specialRules, isLegendary) {
-    return {
-      sagaDice: sagaDice,
-      cost: cost,
-      unitType: unitType,
-      unitName: unitName,
-      numModels: numModels,
-      equipment: equipment,
-      armourMelee: armourMelee,
-      armourRanged: armourRanged,
-      aggMelee: aggMelee,
-      aggRanged: aggRanged,
-      specialRules: specialRules,
-      isLegendary: isLegendary
-    };
-}
-
-//Get The Unit Stats to Add To The Row Depending on the button clicked
-function addUnit(type){
-    var data;
-    if (type === "Hero"){
-        data = createUnit(1,0,"Hero","Warlord",1,"-",5,5,8,0,"-",false)   
-    }else if (type === "Hearthguard"){
-        data = createUnit(1,1,"Hearthguard","Hearthguard",4,"-",5,5,2,0,"-",false)
-    }else if (type === "Warrior"){
-        data = createUnit(1,1,"Warrior","Warrior",8,"-",4,4,1,0,"-",false)
-    }else if (type === "Levy"){
-        data = createUnit(1,1,"Levy","Levy",12,"-",4,4,1,0,"-",false)
-    }else{
-        console.log("Invalid Argument Passed By The Button")
-        return;
-    }
-    addRow(data);
-}
-
 //Add a row to the table using JavaScript
-function addRow(data){
-    //Define Literals To Store Data That Was Difficult To Import (In version 2.0 this will be pulled from session storage)
-
+export function addRow(data){
     //Available types of units 
-    const unitOptions = [
-        ["Hero", "Hero"],
-        ["Hearthguard", "Hearthguard"],
-        ["Warrior", "Warrior"],
-        ["Levy", "Levy"]
-    ];
+    const unitOptions = sagaOptions.Options.unitOptions;
 
     //Available types of equipment
-    const equipmentOptions = [
-        // General Equipment Section
-        ["Bows", "Bows"],
-        ["Bows and Slings", "Bows and Slings"],
-        ["Composite Bows", "Composite Bows"],
-        ["Crossbows", "Crossbows"],
-        ["Heavy Weapons", "Heavy Weapons"],
-        ["Improvised Projectiles", "Improvised Projectiles"],
-        ["Javelins", "Javelins"],
-        ["Sarissa", "Sarissa"],
-        ["Slings", "Slings"],
-        ["Unarmed", "Unarmed"],
-      
-        // Horse + Equipment Section
-        ["Horse", "Horse"],
-        ["Horse, Cataphract", "Horse, Cataphract"],
-        ["Horse, Composite Bows", "Horse, Composite Bows"],
-        ["Horse, Javelins", "Horse, Javelins"],
-      
-        // Camel + Equipment Section
-        ["Camel, Composite Bows", "Camel, Composite Bows"],
-        ["Camel, Javelins", "Camel, Javelins"],
-      
-        // Represents No Special Equipment
-        ["-", "-"]
-      ];
-
+    const equipmentOptions = sagaOptions.Options.equipmentOptions;
 
     //Get The Table
     const table = document.getElementById('unitTable');
 
     //Create The Row
     const row = document.createElement('tr');
+
     //Shade Row To Flag To User That Row Is Newly Created
     row.style.backgroundColor = "cadetblue";
 
@@ -219,7 +103,7 @@ function addRow(data){
     unitType.name = 'unitType';
     
     unitOptions.forEach(list => {
-        option = document.createElement('option');
+        var option = document.createElement('option');
         option.value = list[0];
         option.textContent = list[1];
         if (list[1] === data["unitType"]){
@@ -268,7 +152,7 @@ function addRow(data){
     equipment.name = 'equipment';
     
     equipmentOptions.forEach(list => {
-        option = document.createElement('option');
+        var option = document.createElement('option');
         option.value = list[0];
         option.textContent = list[1];
         if (list[1] === data["equipment"]) {
@@ -334,18 +218,25 @@ function addRow(data){
     specialRulesCell.appendChild(specialRulesTextarea);
     row.appendChild(specialRulesCell);
 
-    //Legendary Select Field
+    //Legendary Checkbox
     const isLegendaryCell = document.createElement('td');
     const isLegendary = document.createElement('select');
     isLegendary.name = "isLegendary"
 
-    trueOption = document.createElement('option');
+    var trueOption = document.createElement('option');
     trueOption.value = "True";
+    trueOption.textContent = "True";
 
-    falseOption = document.createElement('option');
+    var falseOption = document.createElement('option');
     falseOption.value = "False";
-    falseOption.selected = true;
-    
+    falseOption.textContent = "False"
+
+    if(!data.isLegendary){
+        falseOption.selected = true;
+    }else{
+        trueOption.selected = true;
+    }
+
     isLegendary.appendChild(trueOption)
     isLegendary.appendChild(falseOption)
     isLegendaryCell.appendChild(isLegendary);
@@ -357,7 +248,7 @@ function addRow(data){
     cost.type = 'number';
     cost.name = 'cost';
     cost.className = 'shrinkInput';
-    cost.value = data["cost"];
+    cost.value = data['cost'];
     costCell.appendChild(cost);
     row.appendChild(costCell);
 
@@ -375,3 +266,22 @@ function addRow(data){
     //Add Finished Row To Table
     table.appendChild(row);
 }
+
+//Get The Unit Stats to Add To The Row Depending on the button clicked
+export function addUnit(type){
+    var data;
+    if (type === "Hero"){
+        data = sagaOptions.Default.Hero;
+    }else if (type === "Hearthguard"){
+        data = sagaOptions.Default.Hearthguard;
+    }else if (type === "Warrior"){
+        data = sagaOptions.Default.Warrior;
+    }else if (type === "Levy"){
+        data = sagaOptions.Default.Levy;
+    }else{
+        console.log("Invalid Argument: ",type," passed by addUnit")
+        return;
+    }
+    addRow(data);
+}
+
