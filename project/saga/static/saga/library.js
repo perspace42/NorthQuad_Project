@@ -1,6 +1,6 @@
 //Global Variable to Store JSON
 export let sagaOptions;
-export let deleteRows;
+export let deleteRowsList = [];
 
 //Function to get the JSON file in the same directory as the given script
 export async function getSagaOptions(scriptName, jsonPath) {
@@ -50,23 +50,23 @@ export function deleteRow(event){
         row.remove();
     }
     //Check if the row is already grayed out
-    else if (deleteRows.includes(id)){
+    else if (deleteRowsList.includes(id)){
         // If grayed out, revert the row to its original color
         row.style.backgroundColor = '';
         deleteButton.textContent = 'Delete';
         deleteButton.style.color = 'red';
         //Remove the row from the deleteRows array
-        deleteRows.splice(deleteRows.indexOf(id), 1);    
+        deleteRowsList.splice(deleteRowsList.indexOf(id), 1);    
     }else{
         //If not grayed out, gray out the row
         row.style.backgroundColor = 'grey';
         deleteButton.textContent = 'Cancel';
         deleteButton.style.color = 'black';
         //Add the row to the greyedOutRows array
-        deleteRows.push(id);
+        deleteRowsList.push(id);
     }
     //Push to the console which rows are to be deleted
-    console.log("Delete Rows:", deleteRows)
+    console.log("Delete Rows:", deleteRowsList)
 }
 
 /*
