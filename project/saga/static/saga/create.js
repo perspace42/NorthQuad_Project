@@ -12,11 +12,8 @@ function submitSaveForm(url){
 //Expose to global scope
 window.submitSaveForm = submitSaveForm;
 
-function addUnit(data){
-    sagaLibrary.addUnit(data);
-}
-//Expose to global scope
-window.addUnit = addUnit;
+//addUnit == sagaLibrary.addUnit in global scope
+window.addUnit = sagaLibrary.addUnit
 
 //After document has loaded, run the rest of the JavaScript
 document.addEventListener('DOMContentLoaded', async function(){

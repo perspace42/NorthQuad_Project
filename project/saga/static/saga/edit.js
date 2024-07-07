@@ -11,6 +11,7 @@ function submitDeleteForm(url) {
     console.log("Delete Faction Button Pressed");
     form.submit();
 }
+//add to global scope
 window.submitDeleteForm = submitDeleteForm;
 
 //Function for editing a faction
@@ -23,7 +24,11 @@ function submitEditForm(url){
     form.action = url;
     form.submit();
 }
+//add to global scope
 window.submitEditForm = submitEditForm;
+
+//addUnit == sagaLibrary.addUnit in global scope
+window.addUnit = sagaLibrary.addUnit
 
 
 //After document has loaded, run the rest of the JavaScript
@@ -53,12 +58,3 @@ document.addEventListener('DOMContentLoaded', async function(){
     });
 });
 
-/*
-This is the section for dynamically adding new Units to the rows to then add to the table
-*/
-//Get The Unit Stats to Add To The Row Depending on the button clicked
-function addUnit(type){
-    sagaLibrary.addUnit(type);
-}
-//add to global scope
-window.addUnit = addUnit;
