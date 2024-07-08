@@ -48,6 +48,8 @@ def validate(sagaDice,cost,unitType,unitName,numModels,equipment,armourMelee,arm
     except (Exception, AssertionError) as e:
         values.clear()
         print("A problem occurred during validation:",e)
+        #rethrow exception
+        raise e
 
     finally:
         return values

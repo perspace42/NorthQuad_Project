@@ -30,7 +30,6 @@ window.submitEditForm = submitEditForm;
 //addUnit == sagaLibrary.addUnit in global scope
 window.addUnit = sagaLibrary.addUnit
 
-
 //After document has loaded, run the rest of the JavaScript
 document.addEventListener('DOMContentLoaded', async function(){
     //Wait to load the necessary data
@@ -48,9 +47,6 @@ document.addEventListener('DOMContentLoaded', async function(){
         //Prevent default form submission
         event.preventDefault();  
     });
-
-    //Get All Of The Delete Buttons (Is not a const as new delete buttons may be added / removed as new rows are added / removed)
-    deleteButtons = document.querySelectorAll('.deleteRow');
 
     //Add The deleteRow event listener to each of the buttons
     deleteButtons.forEach(button => {

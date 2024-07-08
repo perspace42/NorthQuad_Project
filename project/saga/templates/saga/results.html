@@ -32,19 +32,19 @@ Allow the user to view a faction they have selected.
     {% if faction %}
         <header>
             <!--In this case the first object in the QuerySet is the only object in the QuerySet-->
-            <h1>{{faction.first.name}}</h1>
+            <h1>{{faction.name}}</h1>
         </header>
 
         <p1>
             <!--Same thing here-->
-            {{faction.first.description}}
+            {{faction.description}}
         </p1>
 
         <!--If their are any special rules list them-->
-        {%if faction.first.specialRules != "-"%}
+        {%if faction.specialRules != "-"%}
           <br><br>
           <h3>Special Rules</h3>
-          <p1>{{faction.first.specialRules}}</p1>
+          <p1>{{faction.specialRules}}</p1>
         {%endif%}
         
 

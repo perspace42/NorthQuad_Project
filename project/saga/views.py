@@ -26,45 +26,43 @@ def index(request):
 
 #Results View Page, (GET Units that are in a Faction)
 def results(request,factionId):   
-    #Get Faction From FactionId
-    faction = Faction.objects.filter(id = factionId)
-    print(faction.first)
-    #If Any Factions Exist With The Given FactionId
-    if faction.count() > 0:
-        print("We're digging for units")
-        #If so get the units in that faction whose factionId matches the foreign key: id (factionId__id) from Faction
-        unitList = Unit.objects.filter(factionId__id = factionId)
-        #If antything is in the unit list
-        if unitList.count() > 0:
-            print("We found units")
-            #Split unit list into alphabetically ordered unit types
-            heroList = Unit.objects.filter(factionId__id = factionId, unitType = "Hero").order_by("unitName")
-            hearthguardList = Unit.objects.filter(factionId__id = factionId, unitType = "Hearthguard").order_by("unitName")
-            warriorList = Unit.objects.filter(factionId__id = factionId, unitType = "Warrior").order_by("unitName")
-            levyList = Unit.objects.filter(factionId__id = factionId, unitType = "Levy").order_by("unitName")
-
-            #The order of the unitSet will determine the order in which table units are displayed by type
-            unitSet = [heroList,hearthguardList,warriorList,levyList]
-            
-            context = {
-                "unitSet" : unitSet, 
-                "faction" : faction
-                }
-            return render(request, "saga/results.html", context)
-        
-        #Faction Exists, Contains No Units
-        else:
-            print("No units in faction")
-            context = {
-                "faction" : faction
-            }
-            return render(request, "saga/results.html", context)
-    
-    #Error Non Existent Faction
-    else:
-        print("no faction found")
-        #Redirect To Home Page 
+    try:
+        #Get Faction
+        faction = get_object_or_404(Faction, id = factionId)
+    #If faction is non existent
+    except:
+        print(f"Faction with ID: {factionId} not found")
+        #Redirect To Home Page (change to error message later)
         return redirect(reverse('saga:index'))
+   
+    print("We're digging for units")
+    #If so get the units in that faction whose factionId matches the foreign key: id (factionId__id) from Faction
+    unitList = Unit.objects.filter(factionId__id = factionId)
+    #If antything is in the unit list
+    if unitList.count() > 0:
+        print("We found units")
+        #Split unit list into alphabetically ordered unit types
+        heroList = Unit.objects.filter(factionId__id = factionId, unitType = "Hero").order_by("unitName")
+        hearthguardList = Unit.objects.filter(factionId__id = factionId, unitType = "Hearthguard").order_by("unitName")
+        warriorList = Unit.objects.filter(factionId__id = factionId, unitType = "Warrior").order_by("unitName")
+        levyList = Unit.objects.filter(factionId__id = factionId, unitType = "Levy").order_by("unitName")
+
+        #The order of the unitSet will determine the order in which table units are displayed by type
+        unitSet = [heroList,hearthguardList,warriorList,levyList]
+            
+        context = {
+            "unitSet" : unitSet, 
+            "faction" : faction
+            }
+        return render(request, "saga/results.html", context)
+        
+    #Faction Exists, Contains No Units
+    else:
+        print("No units in faction")
+        context = {
+            "faction" : faction
+        }
+        return render(request, "saga/results.html", context)
 
 #Edit/Create Page, (Edit/Delete Exiting Faction)
 
@@ -73,54 +71,66 @@ def create(request):
     context = {
         "options" : Options
     }
-    
     return render(request,"saga/create.html", context)
 
 #If Faction Supplied (Edit Existing Faction)
 def edit(request,factionId):
-    #Get Faction From FactionId
-    faction = Faction.objects.filter(id = factionId)
-    #If Any Factions Exist With The Given FactionId
-    if faction.count() > 0:
-        #If so get the units in that faction whose factionId matches the foreign key: id (factionId__id) from Faction
-        unitList = Unit.objects.filter(factionId__id = factionId)
-        #If antything is in the unit list
-        if unitList.count() > 0:
-            #Split unit list into alphabetically ordered unit types
-            heroList = Unit.objects.filter(factionId__id = factionId, unitType = "Hero").order_by("unitName")
-            hearthguardList = Unit.objects.filter(factionId__id = factionId, unitType = "Hearthguard").order_by("unitName")
-            warriorList = Unit.objects.filter(factionId__id = factionId, unitType = "Warrior").order_by("unitName")
-            levyList = Unit.objects.filter(factionId__id = factionId, unitType = "Levy").order_by("unitName")
+    try:
+        #Get Faction
+        faction = get_object_or_404(Faction, id = factionId)
+    #If faction is non existent
+    except:
+        print(f"Faction with ID: {factionId} not found")
+        #Redirect To Home Page (change to error message later)
+        return redirect(reverse('saga:index'))
+    
+    #If so get the units in that faction whose factionId matches the foreign key: id (factionId__id) from Faction
+    unitList = Unit.objects.filter(factionId__id = factionId)
+    #If antything is in the unit list
+    if unitList.count() > 0:
+        #Split unit list into alphabetically ordered unit types
+        heroList = Unit.objects.filter(factionId__id = factionId, unitType = "Hero").order_by("unitName")
+        hearthguardList = Unit.objects.filter(factionId__id = factionId, unitType = "Hearthguard").order_by("unitName")
+        warriorList = Unit.objects.filter(factionId__id = factionId, unitType = "Warrior").order_by("unitName")
+        levyList = Unit.objects.filter(factionId__id = factionId, unitType = "Levy").order_by("unitName")
 
-            #The order of the unitSet will determine the order in which table units are displayed by type
-            unitSet = [heroList,hearthguardList,warriorList,levyList]
+        #The order of the unitSet will determine the order in which table units are displayed by type
+        unitSet = [heroList,hearthguardList,warriorList,levyList]
             
-            context = {
-                "unitSet" :unitSet, 
-                "faction" : faction,
-                "options" : Options
-                }
-            return render(request, "saga/edit.html", context)
+        context = {
+            "unitSet" :unitSet, 
+            "faction" : faction,
+            "options" : Options
+            }
+        return render(request, "saga/edit.html", context)
     
     #Error Non Existent Faction
     else:
-        #Redirect To Create Page (Must be namespaced due to app name)
+        #Redirect To Create Page (change to error message later)
         return redirect(reverse('saga:create'))
 
 
 #Delete Faction (From Edit Page)
 def delete(request,factionId):
-    #Get Faction To Delete
-    faction = Faction.objects.filter(id = factionId)
-    #If Faction Exists and Data has been posted from a form
-    if faction.count() > 0 and request.method == 'POST':
+    if request.method == 'POST':
+        try:
+        #Get Faction
+            faction = get_object_or_404(Faction, id = factionId)
+        #If faction is non existent
+        except:
+            print(f"Faction with ID: {factionId} not found")
+            #Redirect To Home Page (change to error message later)
+            return redirect(reverse('saga:index'))
+        
+        
         #Delete the faction
         faction.delete()
         #Return to home page on success (Will change to success message later)
         return redirect(reverse("saga:index"))
     
-    #Return to create page on failure (Will change to failure message later)
-    return redirect(reverse("saga:create"))    
+    else:
+        #Return to create page on failure (Will change to failure message later)
+        return redirect(reverse("saga:create"))    
 
 
 #Push Changes To Faction (From Edit Page)
@@ -157,7 +167,30 @@ def editPush(request, factionId):
         legendaryList = request.POST.getlist('isLegendary')
         costList = request.POST.getlist('cost')
 
-        #Note operations will only be executed if no errors occur
+        #Validate Data (No Operations Will Be Executed If Data is Erroneous)
+        valueList = []
+        for index in range(len(idList)):
+            #Get Values (Validation Function Either Returns Valid Values or an Empty Dictionary)
+            try:
+                values = validate(
+                    sagaDice = diceList[index],
+                    cost = costList[index],
+                    unitType = typeList[index],
+                    unitName = nameList[index],
+                    numModels = modelList[index],
+                    equipment = equipmentList[index],
+                    armourMelee = armourMeleeList[index],
+                    armourRanged = armourRangedList[index],
+                    aggMelee = aggMeleeList[index],
+                    aggRanged = aggRangedList[index],
+                    specialRules = specialList[index],
+                    isLegendary = legendaryList[index],
+                )
+                valueList.append(values)
+            except:
+                print("Unit data failed validation")
+                return redirect(reverse("saga:index"))
+       
 
         #To Store Units To Be Added To The Database
         newUnitsList = []
@@ -218,22 +251,7 @@ def editPush(request, factionId):
         #Update and Insert Each Other Rows
         for index in range(len(idList)):
             id = idList[index]
-            #Get Values (Validation Function Either Returns Valid Values or an Empty Dictionary)
-            values = validate(
-                sagaDice = diceList[index],
-                cost = costList[index],
-                unitType = typeList[index],
-                unitName = nameList[index],
-                numModels = modelList[index],
-                equipment = equipmentList[index],
-                armourMelee = armourMeleeList[index],
-                armourRanged = armourRangedList[index],
-                aggMelee = aggMeleeList[index],
-                aggRanged = aggRangedList[index],
-                specialRules = specialList[index],
-                isLegendary = legendaryList[index],
-            )
-                
+            values = valueList[index]
             #INSERT OPERATION
             if id == "new":
                 #Create the new unit
@@ -263,6 +281,7 @@ def editPush(request, factionId):
                     unit = get_object_or_404(Unit, id = unitId)
                 except:
                     print(f"Unit With ID: {id} not found")
+                    #change to error message later
                     return redirect(reverse("saga:index"))
                 
                 #Then update the unit if the values are correct
@@ -285,7 +304,7 @@ def editPush(request, factionId):
                 #If no valid values provided, redirect
                 else:
                     return redirect(reverse("saga:index"))
-
+                
 
         #Save Changes Section
         #This section is only reached if no errors have occurred accessing and validating the data
@@ -334,6 +353,29 @@ def createPush(request):
         legendaryList = request.POST.getlist('isLegendary')
         costList = request.POST.getlist('cost')
 
+        #Check Each Of The Rows For Valid Values
+        valueList = []
+        for index in range(len(idList)):
+            try:
+                values = validate(
+                    sagaDice = diceList[index],
+                    cost = costList[index],
+                    unitType = typeList[index],
+                    unitName = nameList[index],
+                    numModels = modelList[index],
+                    equipment = equipmentList[index],
+                    armourMelee = armourMeleeList[index],
+                    armourRanged = armourRangedList[index],
+                    aggMelee = aggMeleeList[index],
+                    aggRanged = aggRangedList[index],
+                    specialRules = specialList[index],
+                    isLegendary = legendaryList[index],
+                )
+                valueList.append(values)
+            except:
+                print("Unit data failed validation")
+                return redirect(reverse("saga:index"))
+            
         #Note operations will only be executed if no errors occur
 
         #To Store Units To Be Added To The Database
@@ -349,20 +391,7 @@ def createPush(request):
         #Check Each Of The Rows For Valid Values
         for index in range(len(idList)):
             #Get Values (Validation Function Either Returns Valid Values or an Empty Dictionary)
-            values = validate(
-                sagaDice = diceList[index],
-                cost = costList[index],
-                unitType = typeList[index],
-                unitName = nameList[index],
-                numModels = modelList[index],
-                equipment = equipmentList[index],
-                armourMelee = armourMeleeList[index],
-                armourRanged = armourRangedList[index],
-                aggMelee = aggMeleeList[index],
-                aggRanged = aggRangedList[index],
-                specialRules = specialList[index],
-                isLegendary = legendaryList[index],
-            )
+            values = valueList[index]
                 
             #Insert Operation
             #Create the new unit
