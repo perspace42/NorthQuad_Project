@@ -64,7 +64,8 @@ class Unit(models.Model):
     #String Representation
     def __str__(self):
         #Ensure that equipment is only added to name if there is any equipment to add
-        return self.unitName if self.equipment == "-" else self.unitName + " " +  self.equipment
+        equipment_str = f" {self.equipment}" if self.equipment != "-" else ""
+        return str(self.id) + ": " + equipment_str
 
     
 

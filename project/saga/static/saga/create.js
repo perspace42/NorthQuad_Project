@@ -4,10 +4,13 @@ console.log("create.js loaded successfully");
 
 //Function for Saving Faction to database
 function submitSaveForm(url){
-    var form = document.getElementById('factionForm');
-    form.action = url;
-    console.log("Save Faction Button Pressed");
-    form.submit()
+    if (window.confirm("Are you sure you want to create the faction?")){
+        console.log("I have been run");
+        var form = document.getElementById('factionForm');
+        form.action = url;
+        console.log("Save Faction Button Pressed");
+        form.submit();
+    }
 }
 //Expose to global scope
 window.submitSaveForm = submitSaveForm;

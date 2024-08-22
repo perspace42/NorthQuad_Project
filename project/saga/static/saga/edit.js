@@ -3,26 +3,29 @@ import * as sagaLibrary from "./library.js";
 //Log if file has been accessed
 console.log("edit.js loaded successfully");
 
-
 //Function for deleting a faction
 function submitDeleteForm(url) {
-    var form = document.getElementById('factionForm');
-    form.action = url;
-    console.log("Delete Faction Button Pressed");
-    form.submit();
+    if (window.confirm("Are you sure you want to delete the faction?")){
+        var form = document.getElementById('factionForm');
+        form.action = url;
+        console.log("Delete Faction Button Pressed");
+        form.submit();
+    }
 }
 //add to global scope
 window.submitDeleteForm = submitDeleteForm;
 
 //Function for editing a faction
 function submitEditForm(url){
-    var form = document.getElementById('factionForm');
-    //This is a hidden input tag that stores the deleted rows
-    var deleteInputTag = document.getElementById('deleteRows');
-    //Convert Array To String
-    deleteInputTag.value = sagaLibrary.deleteRowsList.join(',');
-    form.action = url;
-    form.submit();
+    if (window.confirm("Are you sure you want to submit the faction?")){
+        var form = document.getElementById('factionForm');
+        //This is a hidden input tag that stores the deleted rows
+        var deleteInputTag = document.getElementById('deleteRows');
+        //Convert Array To String
+        deleteInputTag.value = sagaLibrary.deleteRowsList.join(',');
+        form.action = url;
+        form.submit();
+    }
 }
 //add to global scope
 window.submitEditForm = submitEditForm;

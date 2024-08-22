@@ -1,7 +1,7 @@
 '''
 Author: Scott Field
-Date: 5/24/2024
-Version: 1.0
+Date: 8/21/2024
+Version: 1.5
 Purpose:
 Defines the views for: Create, Read, Update, Delete, for the website
 (The Get, Post, Update and Delete Requests)
@@ -10,6 +10,7 @@ Defines the views for: Create, Read, Update, Delete, for the website
 
 from django.shortcuts import get_object_or_404, render, redirect #shorten instructions
 from django.urls import reverse #enable generating urls from routes
+from django.db import transaction #ensure database updating is concurrent
 
 from .models import Faction, Unit
 from sagaoptions import Options
@@ -84,31 +85,23 @@ def edit(request,factionId):
         #Redirect To Home Page (change to error message later)
         return redirect(reverse('saga:index'))
     
-    #If so get the units in that faction whose factionId matches the foreign key: id (factionId__id) from Faction
-    unitList = Unit.objects.filter(factionId__id = factionId)
-    #If antything is in the unit list
-    if unitList.count() > 0:
-        #Split unit list into alphabetically ordered unit types
-        heroList = Unit.objects.filter(factionId__id = factionId, unitType = "Hero").order_by("unitName")
-        hearthguardList = Unit.objects.filter(factionId__id = factionId, unitType = "Hearthguard").order_by("unitName")
-        warriorList = Unit.objects.filter(factionId__id = factionId, unitType = "Warrior").order_by("unitName")
-        levyList = Unit.objects.filter(factionId__id = factionId, unitType = "Levy").order_by("unitName")
+    #Split unit list into alphabetically ordered unit types
+    heroList = Unit.objects.filter(factionId__id = factionId, unitType = "Hero").order_by("unitName")
+    hearthguardList = Unit.objects.filter(factionId__id = factionId, unitType = "Hearthguard").order_by("unitName")
+    warriorList = Unit.objects.filter(factionId__id = factionId, unitType = "Warrior").order_by("unitName")
+    levyList = Unit.objects.filter(factionId__id = factionId, unitType = "Levy").order_by("unitName")
 
-        #The order of the unitSet will determine the order in which table units are displayed by type
-        unitSet = [heroList,hearthguardList,warriorList,levyList]
+    #The order of the unitSet will determine the order in which table units are displayed by type
+    unitSet = [heroList,hearthguardList,warriorList,levyList]
             
-        context = {
-            "unitSet" :unitSet, 
-            "faction" : faction,
-            "options" : Options
-            }
-        return render(request, "saga/edit.html", context)
+    context = {
+        "unitSet" :unitSet, 
+        "faction" : faction,
+        "options" : Options
+        }
+    return render(request, "saga/edit.html", context)
     
-    #Error Non Existent Faction
-    else:
-        #Redirect To Create Page (change to error message later)
-        return redirect(reverse('saga:create'))
-
+    
 
 #Delete Faction (From Edit Page)
 def delete(request,factionId):
@@ -152,6 +145,12 @@ def editPush(request, factionId):
         factionDescription = request.POST.get('fDescription')
         factionSpecial = request.POST.get('fSpecial')
 
+        #Validate Faction Data By Ensuring it is not empty or consisting of only spaces
+        for factionValues in ((factionName,factionDescription,factionSpecial)):
+            if factionValues.isspace() or factionValues == "":
+                print("One of the faction values is empty")
+                return redirect(reverse("saga:index"))
+
         #Unit List Data (By Row)
         idList = request.POST.getlist('unitId')
         typeList = request.POST.getlist('unitType')
@@ -189,6 +188,7 @@ def editPush(request, factionId):
                 valueList.append(values)
             except:
                 print("Unit data failed validation")
+                #Change to errors page
                 return redirect(reverse("saga:index"))
        
 
@@ -205,12 +205,9 @@ def editPush(request, factionId):
             deleteRows = deleteString.split(",")
         else:
             deleteRows = []
-
-        #Ensure Faction Data is not empty
-        for factionValues in ((factionName,factionDescription,factionSpecial)):
-            if factionValues.strip() == "":
-                print("One of the faction values is empty")
-                return redirect(reverse("saga:index"))
+        
+        print("deleteRows:",deleteRows)
+        print("idList:",idList)
 
         #Add Changes to Faction Fields
         faction.name = factionName
@@ -233,6 +230,8 @@ def editPush(request, factionId):
             del specialList[index]
             del legendaryList[index]
             del costList[index]
+            #also remove from the valueList to ensure a deleted unit is not mistakenly added
+            del valueList[index]
 
         #Delete units from database
         for string in deleteRows:
@@ -243,9 +242,10 @@ def editPush(request, factionId):
                 unit = get_object_or_404(Unit, id = deleteId)
                 #Add unit to the deletion list
                 deleteUnitsList.append(unit)
+                print(f"delete unit id: {deleteId}")
             except:
                 print("Unit To Delete Not Found")
-                #This does not redirect as trying to delete a unit that isn't present, indicates it has already been deleted
+                #change to error message later
                 return redirect(reverse("saga:index"))
             
         #Update and Insert Each Other Rows
@@ -305,18 +305,21 @@ def editPush(request, factionId):
                 else:
                     return redirect(reverse("saga:index"))
                 
-
+        print(f"Deleted Units: {deleteUnitsList}")
+        print(f"Updated Units: {updateUnitsList}")
+        print(f"New Units: {newUnitsList}")
         #Save Changes Section
         #This section is only reached if no errors have occurred accessing and validating the data
+        
         for deleteUnit in deleteUnitsList:
             deleteUnit.delete()
 
         for updateUnit in updateUnitsList:
             updateUnit.save()
-
+            
         for newUnit in newUnitsList:
             newUnit.save()
-
+        
         #Remember to save faction changes as well
         faction.save()
 
@@ -337,6 +340,12 @@ def createPush(request):
         factionName = request.POST.get('fName')
         factionDescription = request.POST.get('fDescription')
         factionSpecial = request.POST.get('fSpecial')
+
+        #Validate Faction Data By Ensuring it is not empty or consisting of only spaces
+        for factionValues in ((factionName,factionDescription,factionSpecial)):
+            if factionValues.isspace() or factionValues == "":
+                print("One of the faction values is empty")
+                return redirect(reverse("saga:index"))
 
         #Unit List Data (By Row)
         idList = request.POST.getlist('unitId')
