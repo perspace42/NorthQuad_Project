@@ -44,8 +44,6 @@ class Options:
         ("-","-"),
     )
 
-#After this is Where Data Was Originally Intended to be Imported Into JavaScript, this code is currently unimplemented on the Python Side
-
 #Function to shorten creation of unit:
 def createUnit(sagaDice,cost,unitType,unitName,numModels,equipment,armourMelee,armourRanged,aggMelee,aggRanged,specialRules,isLegendary):
     return {

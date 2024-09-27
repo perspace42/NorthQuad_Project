@@ -10,7 +10,6 @@ Defines the views for: Create, Read, Update, Delete, for the website
 
 from django.shortcuts import get_object_or_404, render, redirect #shorten instructions
 from django.urls import reverse #enable generating urls from routes
-from django.db import transaction #ensure database updating is concurrent
 
 from .models import Faction, Unit
 from sagaoptions import Options
